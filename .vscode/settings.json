@@ -1,0 +1,9 @@
+{
+  "tailwindCSS.colorDecorators": false,
+  "[php]": {
+    "editor.colorDecorators": false
+  },
+  "[css]": {
+    "editor.colorDecorators": true
+  }
+}

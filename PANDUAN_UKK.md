@@ -21,7 +21,7 @@ File sengaja dipecah per bagian agar rapi, mudah dicari, dan sesuai standar indu
 
 | Nama File | Letak | Fungsi & Penjelasan |
 |---|---|---|
-| `login.php` | Root | Halaman masuk (*Login*), dilengkapi tombol 1-klik akun demo penguji. |
+| `login.php` | Root | Halaman masuk (*Login*), |
 | `register.php` | Root | Halaman pendaftaran (*Register*) pengguna baru dengan validasi lengkap. |
 | `auth.php` | Root | Controller autentikasi (proses verifikasi login, registrasi enkripsi hash, dan logout). |
 | `index.php` | Root | File utama (*entry point*). Terproteksi `requireLogin()`, mengambil data tugas milik user aktif, dan merender tampilan. |

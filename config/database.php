@@ -1,27 +1,47 @@
 <?php
 // ==============================================================================
 // FILE: config/database.php
-// FUNGSI: Mengatur koneksi ke database MySQL menggunakan PDO (PHP Data Objects),
-//         mengelola autentikasi sesi pengguna (Login/Session Guard),
-//         serta menyediakan fungsi helper keamanan dan format data.
+// FUNGSI UTAMA:
+// 1. Mengatur koneksi ke database MySQL menggunakan PDO (PHP Data Objects).
+// 2. Mengelola autentikasi sesi pengguna (Login, User Session, Route Guard).
+// 3. Menyediakan fungsi helper keamanan XSS sanitasi, format tanggal, dan hitung deadline.
+//
+// 🎓 PANDUAN BELAJAR UKK:
+// - PDO dipilih karena mendukung Prepared Statements untuk mencegah SQL Injection.
+// - Menggunakan arsitektur modular agar fungsi-fungsi ini bisa dipanggil dari mana saja.
 // ==============================================================================
 
+// Memulai session PHP jika belum aktif
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 // ------------------------------------------------------------------------------
-// 1. KONFIGURASI KONEKSI DATABASE (Default bawaan Laragon)
+// 1. KONFIGURASI KONEKSI DATABASE (Default Bawaan Laragon)
 // ------------------------------------------------------------------------------
-define('DB_HOST', '127.0.0.1');  // Host database lokal
-define('DB_PORT', '3306');       // Port default MySQL
-define('DB_USER', 'root');       // Username default MySQL di Laragon
-define('DB_PASS', '');           // Password default MySQL di Laragon (kosong)
-define('DB_NAME', 'todolist_db');// Nama database aplikasi
+// ✏️ [TIPS UJIAN UKK]:
+// Jika penguji meminta mengubah database atau jika port MySQL berbeda (misal 3307),
+// atau jika MySQL memiliki password, cukup ubah konstanta di bawah ini:
+define('DB_HOST', '127.0.0.1');   // Host database lokal (localhost)
+define('DB_PORT', '3306');        // Port default MySQL di Laragon
+define('DB_USER', 'root');        // Username default MySQL di Laragon
+define('DB_PASS', '');            // Password default MySQL di Laragon (kosong)
+define('DB_NAME', 'todolist_db'); // Nama database aplikasi
 
 /**
- * Fungsi getDBConnection()
- * Mengambil objek koneksi PDO ke MySQL (Singleton Pattern)
+ * 🎯 [FUNGSI]: getDBConnection()
+ * Membuka dan mengembalikan objek koneksi PDO ke MySQL menggunakan Singleton Pattern.
+ *
+ * 💡 [CARA KERJA]:
+ * - Menggunakan variabel 'static $pdo' agar koneksi hanya dibuat 1 kali per request (hemat memori).
+ * - Menentukan DSN (Data Source Name) dengan charset utf8mb4 agar mendukung emoji & karakter global.
+ * - Jika database 'todolist_db' belum ada, secara cerdas menangkap error (code 1049) dan otomatis
+ *   menjalankan query "CREATE DATABASE IF NOT EXISTS" sehingga aplikasi tidak error saat pertama kali di-run.
+ *
+ * ✏️ [TIPS MENGUBAH / UJIAN UKK]:
+ * Jika penguji bertanya: "Kenapa pakai PDO dibanding mysqli_connect()?"
+ * Jawab: "PDO lebih aman karena prepared statements bawaan, mendukung banyak jenis database,
+ * dan penanganan error menggunakan Exception (Try-Catch) yang rapi."
  */
 function getDBConnection() {
     static $pdo = null;
@@ -32,14 +52,16 @@ function getDBConnection() {
     try {
         $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4";
         $pdo = new PDO($dsn, DB_USER, DB_PASS, [
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES   => false,
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // Error dilempar sebagai Exception
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,       // Hasil query berupa array asosiatif
+            PDO::ATTR_EMULATE_PREPARES   => false,                  // Prepared statement asli dari MySQL
         ]);
         
+        // Buat tabel users & tasks otomatis jika belum tersedia
         initDatabaseTables($pdo);
         return $pdo;
     } catch (PDOException $e) {
+        // Jika database belum ada (Error 1049: Unknown database), buat otomatis
         if ($e->getCode() == 1049 || stripos($e->getMessage(), 'Unknown database') !== false) {
             try {
                 $rootDsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";charset=utf8mb4";
@@ -48,6 +70,7 @@ function getDBConnection() {
                 ]);
                 $rootPdo->exec("CREATE DATABASE IF NOT EXISTS `" . DB_NAME . "` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
 
+                // Sambungkan ulang setelah database berhasil dibuat
                 $pdo = new PDO("mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4", DB_USER, DB_PASS, [
                     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -68,8 +91,17 @@ function getDBConnection() {
 }
 
 /**
- * Fungsi initDatabaseTables()
- * Membuat struktur tabel `users` dan `tasks`, serta melakukan migrasi kolom jika belum ada
+ * 🎯 [FUNGSI]: initDatabaseTables($pdo)
+ * Inisialisasi struktur database: membuat tabel 'users' dan 'tasks', migrasi kolom, serta seed data demo.
+ *
+ * 💡 [CARA KERJA]:
+ * - Menjalankan CREATE TABLE IF NOT EXISTS untuk tabel 'users' dan 'tasks'.
+ * - Mengecek keberadaan kolom baru (user_id, status, start_time, due_time) via query SHOW COLUMNS.
+ * - Membuat 1 akun penguji bawaan (username: penguji / password: password123) untuk kemudahan demo.
+ *
+ * ✏️ [TIPS MENGUBAH / UJIAN UKK]:
+ * Jika penguji meminta menambahkan kolom baru (misal: 'attachment' atau 'keterangan_tambahan'),
+ * tambahkan definisi kolomnya di tabel dan tambahkan blok migrasi ALTER TABLE di bawah ini.
  */
 function initDatabaseTables($pdo) {
     if (!$pdo) return;
@@ -89,7 +121,6 @@ function initDatabaseTables($pdo) {
 
     // Buat akun demo bawaan jika tabel users masih kosong
     $userCount = $pdo->query("SELECT COUNT(*) FROM `users`")->fetchColumn();
-    $defaultUserId = 1;
     if ($userCount == 0) {
         $hashedPassword = password_hash('password123', PASSWORD_DEFAULT);
         $stmtUser = $pdo->prepare("
@@ -118,7 +149,7 @@ function initDatabaseTables($pdo) {
     ";
     $pdo->exec($createTasksTable);
 
-    // 3. Migrasi kolom 'user_id' pada tabel tasks jika belum ada
+    // Migrasi kolom 'user_id' pada tabel tasks jika belum ada
     try {
         $checkUserId = $pdo->query("SHOW COLUMNS FROM `tasks` LIKE 'user_id'")->fetch();
         if (!$checkUserId) {
@@ -150,93 +181,56 @@ function initDatabaseTables($pdo) {
             $pdo->exec("ALTER TABLE `tasks` ADD COLUMN `due_time` TIME NULL AFTER `start_time`");
         }
     } catch (Exception $ex) {}
-
-    // Jika tabel tasks kosong, tambahkan data contoh untuk akun demo (user_id = 1)
-    $taskCount = $pdo->query("SELECT COUNT(*) FROM `tasks`")->fetchColumn();
-    if ($taskCount == 0) {
-        $stmt = $pdo->prepare("
-            INSERT INTO `tasks` (`user_id`, `title`, `description`, `category`, `priority`, `status`, `due_date`, `start_time`, `due_time`) 
-            VALUES (:uid, :title, :description, :category, :priority, :status, :due_date, :start_time, :due_time)
-        ");
-
-        $samples = [
-            [
-                'uid'         => 1,
-                'title'       => 'Merancang Desain Antarmuka Modern 🎨',
-                'description' => 'Membuat Kanban board & Kalender real-time dengan Tailwind CSS.',
-                'category'    => 'Pekerjaan',
-                'priority'    => 'high',
-                'status'      => 'in_progress',
-                'due_date'    => date('Y-m-d'),
-                'start_time'  => '08:30:00',
-                'due_time'    => '11:00:00'
-            ],
-            [
-                'uid'         => 1,
-                'title'       => 'Rapat Evaluasi Proyek Mingguan ☕',
-                'description' => 'Diskusi progres fitur baru bersama tim pengembang.',
-                'category'    => 'Pekerjaan',
-                'priority'    => 'medium',
-                'status'      => 'todo',
-                'due_date'    => date('Y-m-d'),
-                'start_time'  => '13:00:00',
-                'due_time'    => '14:30:00'
-            ],
-            [
-                'uid'         => 1,
-                'title'       => 'Membeli perlengkapan harian 🛒',
-                'description' => 'Beli buku catatan, pulpen baru, dan camilan untuk belajar.',
-                'category'    => 'Pribadi',
-                'priority'    => 'low',
-                'status'      => 'todo',
-                'due_date'    => date('Y-m-d', strtotime('+2 days')),
-                'start_time'  => '16:00:00',
-                'due_time'    => '17:30:00'
-            ]
-        ];
-
-        foreach ($samples as $s) {
-            $stmt->execute([
-                ':uid'         => $s['uid'],
-                ':title'       => $s['title'],
-                ':description' => $s['description'],
-                ':category'    => $s['category'],
-                ':priority'    => $s['priority'],
-                ':status'      => $s['status'],
-                ':due_date'    => $s['due_date'],
-                ':start_time'  => $s['start_time'],
-                ':due_time'    => $s['due_time']
-            ]);
-        }
-    }
 }
 
 // ------------------------------------------------------------------------------
-// 2. HELPER AUTENTIKASI PENGGUNA (SESSION MANAGEMENT)
+// 2. HELPER AUTENTIKASI PENGGUNA (SESSION MANAGEMENT & ROUTE GUARD)
 // ------------------------------------------------------------------------------
+
+/**
+ * 🎯 [FUNGSI]: isLoggedIn()
+ * Memeriksa apakah ada user yang sedang login di sesi browser saat ini.
+ *
+ * 💡 [CARA KERJA]:
+ * Mengecek apakah variabel $_SESSION['user_id'] telah diset dan tidak kosong.
+ * Mengembalikan true jika sudah login, atau false jika belum.
+ *
+ * ✏️ [TIPS MENGUBAH / UJIAN UKK]:
+ * Gunakan 'if (isLoggedIn()) { ... }' untuk menyembunyikan/menampilkan tombol tertentu.
+ */
 if (!function_exists('isLoggedIn')) {
-    /**
-     * Memeriksa apakah pengguna sudah login
-     */
     function isLoggedIn() {
         return isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
     }
 }
 
+/**
+ * 🎯 [FUNGSI]: getCurrentUser()
+ * Mengambil array data profil pengguna yang sedang aktif dari Session.
+ *
+ * 💡 [CARA KERJA]:
+ * Mengembalikan data yang disimpan saat proses login di auth.php:
+ * ['id' => ..., 'name' => ..., 'username' => ..., 'email' => ...]
+ */
 if (!function_exists('getCurrentUser')) {
-    /**
-     * Mengambil data akun pengguna yang sedang aktif
-     */
     function getCurrentUser() {
         return $_SESSION['user'] ?? null;
     }
 }
 
+/**
+ * 🎯 [FUNGSI]: requireLogin()
+ * Penjaga Gerbang Halaman (Route Guard / Middleware).
+ *
+ * 💡 [CARA KERJA]:
+ * Memeriksa status login dengan isLoggedIn(). Jika pengunjung belum login,
+ * otomatis diarahkan (redirect) ke halaman login.php dengan membawa pesan peringatan,
+ * lalu script langsung dihentikan dengan 'exit;' agar konten rahasia tidak bocor.
+ *
+ * ✏️ [TIPS MENGUBAH / UJIAN UKK]:
+ * Wajib diletakkan di baris paling atas halaman apa pun yang ingin diproteksi (misal: index.php).
+ */
 if (!function_exists('requireLogin')) {
-    /**
-     * Penjaga halaman (Route Guard)
-     * Mengalihkan pengunjung ke login.php jika belum login
-     */
     function requireLogin() {
         if (!isLoggedIn()) {
             setFlash('danger', 'Silakan login terlebih dahulu untuk mengakses aplikasi.');
@@ -247,14 +241,40 @@ if (!function_exists('requireLogin')) {
 }
 
 // ------------------------------------------------------------------------------
-// 3. HELPER FORMAT DATA & KEAMANAN
+// 3. HELPER FORMAT DATA, KEAMANAN XSS & WAKTU
 // ------------------------------------------------------------------------------
+
+/**
+ * 🎯 [FUNGSI]: e($string) - Singkatan dari Escape HTML
+ * Mencegah celah keamanan XSS (Cross-Site Scripting) pada aplikasi web.
+ *
+ * 💡 [CARA KERJA]:
+ * Membungkus fungsi bawaan PHP htmlspecialchars() dengan flag ENT_QUOTES dan UTF-8.
+ * Mengubah karakter khusus HTML berbahaya seperti '<', '>', '"', '&' menjadi entitas aman:
+ * Contoh: <script> diubah menjadi &lt;script&gt; sehingga tidak dieksekusi oleh browser.
+ *
+ * ✏️ [TIPS MENGUBAH / UJIAN UKK]:
+ * Jawaban wajib untuk pertanyaan penguji tentang keamanan:
+ * "Setiap data dari input user yang dicetak ke HTML selalu dilewatkan ke fungsi e()!"
+ */
 if (!function_exists('e')) {
     function e($string) {
         return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
     }
 }
 
+/**
+ * 🎯 [FUNGSI]: formatTanggalIndo($dateStr)
+ * Mengubah format tanggal database (YYYY-MM-DD) menjadi format Bahasa Indonesia (Contoh: '23 Nov 2026').
+ *
+ * 💡 [CARA KERJA]:
+ * Menggunakan strtotime() untuk membaca tanggal, lalu memetakan angka bulan (1-12)
+ * ke array singkatan bulan Indonesia ($bulan).
+ *
+ * ✏️ [TIPS MENGUBAH / UJIAN UKK]:
+ * Jika penguji meminta nama bulan ditulis lengkap (contoh: "23 November 2026"),
+ * ubah isi array $bulan dari 'Nov' menjadi 'November'.
+ */
 if (!function_exists('formatTanggalIndo')) {
     function formatTanggalIndo($dateStr) {
         if (!$dateStr) return null;
@@ -270,6 +290,14 @@ if (!function_exists('formatTanggalIndo')) {
     }
 }
 
+/**
+ * 🎯 [FUNGSI]: formatJam($timeStr)
+ * Memotong format waktu database MySQL 'HH:MM:SS' menjadi 'HH:MM'.
+ *
+ * 💡 [CARA KERJA]:
+ * Menggunakan substr($timeStr, 0, 5) untuk mengambil 5 karakter pertama saja (jam dan menit).
+ * Contoh: '15:40:00' menjadi '15:40'.
+ */
 if (!function_exists('formatJam')) {
     function formatJam($timeStr) {
         if (empty($timeStr)) return null;
@@ -277,6 +305,14 @@ if (!function_exists('formatJam')) {
     }
 }
 
+/**
+ * 🎯 [FUNGSI]: formatRentangWaktu($startTime, $dueTime)
+ * Menampilkan label waktu pengerjaan atau deadline agenda secara rapi di kartu tugas.
+ *
+ * 💡 [CARA KERJA]:
+ * Karena aplikasi disederhanakan hanya menggunakan jam deadline, fungsi ini akan
+ * mengembalikan jam deadline yang sudah diformat (contoh: '15:40').
+ */
 if (!function_exists('formatRentangWaktu')) {
     function formatRentangWaktu($startTime, $dueTime) {
         $start = formatJam($startTime);
@@ -284,15 +320,34 @@ if (!function_exists('formatRentangWaktu')) {
 
         if ($start && $due) {
             return "$start - $due";
+        } elseif ($due) {
+            return $due;
         } elseif ($start) {
             return "Mulai $start";
-        } elseif ($due) {
-            return "Deadline $due";
         }
         return null;
     }
 }
 
+/**
+ * 🎯 [FUNGSI]: getDeadlineStatus($dueDate, $dueTime, $isCompleted)
+ * Menghitung sisa waktu pengerjaan tugas secara real-time dan memberikan badge status deadline.
+ *
+ * 💡 [CARA KERJA]:
+ * 1. Jika tugas sudah 'completed' (selesai) atau tanggal deadline kosong, return null (tidak perlu badge urgensi).
+ * 2. Menggabungkan tanggal dan jam deadline, lalu diubah ke unix timestamp dengan strtotime().
+ * 3. Menghitung selisih waktu: $diffSeconds = $dueTimestamp - time().
+ * 4. Logika Penentuan Badge:
+ *    - Selisih < 0 detik           => 'Terlambat!' (badge merah berkedip/pulse)
+ *    - Selisih <= 21600 detik (6 jam)=> 'Mepet!' (badge merah muda menyala dengan hitung mundur jam & menit)
+ *    - Tanggal sama dengan hari ini => 'Hari Ini' (badge kuning/amber)
+ *    - Tanggal besok (+1 hari)      => 'Besok' (badge biru muda)
+ *
+ * ✏️ [TIPS MENGUBAH / UJIAN UKK]:
+ * Jika penguji meminta: "Tolong ubah ambang batas waktu mepet dari 6 jam jadi 3 jam atau 12 jam":
+ * - Untuk 3 jam : Ubah angka 21600 menjadi 10800 (3 jam x 3600 detik)
+ * - Untuk 12 jam: Ubah angka 21600 menjadi 43200 (12 jam x 3600 detik)
+ */
 if (!function_exists('getDeadlineStatus')) {
     function getDeadlineStatus($dueDate, $dueTime, $isCompleted) {
         if ($isCompleted || empty($dueDate)) {
@@ -304,6 +359,7 @@ if (!function_exists('getDeadlineStatus')) {
         $dueTimestamp = strtotime($dueDate . ' ' . $timePart);
         $diffSeconds = $dueTimestamp - $now;
 
+        // Kategori 1: Sudah lewat waktu (Terlambat)
         if ($diffSeconds < 0) {
             return [
                 'type'        => 'overdue',
@@ -315,6 +371,7 @@ if (!function_exists('getDeadlineStatus')) {
             ];
         }
 
+        // Kategori 2: Sangat mepet (Kurang dari atau sama dengan 6 jam = 21600 detik)
         if ($diffSeconds <= 21600) {
             $hoursLeft = floor($diffSeconds / 3600);
             $minsLeft  = floor(($diffSeconds % 3600) / 60);
@@ -329,6 +386,7 @@ if (!function_exists('getDeadlineStatus')) {
             ];
         }
 
+        // Kategori 3: Jatuh tempo hari ini
         if ($diffSeconds <= 86400 && date('Y-m-d', $dueTimestamp) === date('Y-m-d')) {
             return [
                 'type'        => 'today',
@@ -340,6 +398,7 @@ if (!function_exists('getDeadlineStatus')) {
             ];
         }
 
+        // Kategori 4: Jatuh tempo besok
         $tomorrow = date('Y-m-d', strtotime('+1 day'));
         if ($dueDate === $tomorrow) {
             return [
@@ -356,6 +415,14 @@ if (!function_exists('getDeadlineStatus')) {
     }
 }
 
+/**
+ * 🎯 [FUNGSI]: getHariIniIndo()
+ * Menghasilkan teks nama hari, tanggal, bulan, dan tahun saat ini dalam Bahasa Indonesia.
+ * Contoh hasil: "Senin, 23 November 2026"
+ *
+ * 💡 [CARA KERJA]:
+ * Memetakan date('w') (0 untuk Minggu s.d. 6 untuk Sabtu) dan date('n') (1 s.d. 12 untuk bulan).
+ */
 if (!function_exists('getHariIniIndo')) {
     function getHariIniIndo() {
         $hariIndo = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -364,6 +431,21 @@ if (!function_exists('getHariIniIndo')) {
     }
 }
 
+/**
+ * 🎯 [FUNGSI]: setFlash($type, $message)
+ * Menyimpan notifikasi pesan kilat (Flash Message) ke dalam Session.
+ *
+ * 💡 [CARA KERJA]:
+ * Menyimpan array ['type' => $type, 'message' => $message] ke $_SESSION['flash'].
+ * Tipe yang didukung:
+ * - 'success': Warna hijau (tugas berhasil ditambah/diubah/dihapus)
+ * - 'danger' : Warna merah (validasi gagal / error)
+ * - 'warning': Warna kuning (peringatan)
+ * - 'info'   : Warna biru (informasi logout, dll)
+ *
+ * ✏️ [TIPS MENGUBAH / UJIAN UKK]:
+ * Panggil setFlash('success', 'Pesan Anda') setiap kali menyelesaikan aksi CRUD berhasil.
+ */
 if (!function_exists('setFlash')) {
     function setFlash($type, $message) {
         $_SESSION['flash'] = [
@@ -373,6 +455,14 @@ if (!function_exists('setFlash')) {
     }
 }
 
+/**
+ * 🎯 [FUNGSI]: getFlash()
+ * Mengambil notifikasi pesan kilat (Flash Message) dan langsung menghapusnya dari Session.
+ *
+ * 💡 [CARA KERJA]:
+ * Mengambil $_SESSION['flash'], lalu menjalankan unset($_SESSION['flash']) sehingga pesan
+ * hanya muncul 1 KALI saja dan otomatis hilang saat halaman dimuat ulang (refresh).
+ */
 if (!function_exists('getFlash')) {
     function getFlash() {
         if (isset($_SESSION['flash'])) {

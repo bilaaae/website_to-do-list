@@ -25,6 +25,9 @@ $flash = getFlash();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Masuk &mdash; TaskFlow Workspace</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="assets/img/logo.jpg">
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -58,9 +61,7 @@ $flash = getFlash();
 
         <!-- LOGO & HEADING -->
         <div class="text-center mb-8">
-            <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white text-2xl shadow-lg shadow-brand-500/30 mx-auto mb-3">
-                <i class="fa-solid fa-layer-group"></i>
-            </div>
+            <img src="assets/img/logo.jpg" alt="Logo TaskFlow" class="w-16 h-16 rounded-2xl object-contain p-1 bg-white mx-auto mb-3 shadow-md border border-slate-200">
             <h1 class="text-2xl font-black bg-gradient-to-r from-slate-900 via-indigo-950 to-brand-700 bg-clip-text text-transparent">
                 TaskFlow Workspace
             </h1>

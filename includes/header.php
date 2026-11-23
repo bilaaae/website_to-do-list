@@ -21,6 +21,9 @@ $currentUser = $currentUser ?? getCurrentUser();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaskFlow &mdash; To-Do List & Agenda Elegan</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="assets/img/logo.jpg">
+
     <!-- Tailwind CSS (Framework CSS untuk antarmuka modern) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -45,7 +48,7 @@ $currentUser = $currentUser ?? getCurrentUser();
     <!-- FontAwesome 6 (Ikon modern dan estetik) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- Custom CSS (File styling kustom untuk scrollbar, animasi, kalender, dan drag & drop) -->
+    <!-- Custom CSS (Pusat Pengaturan Warna, Font, Animasi, dan Scrollbar) -->
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800 antialiased pb-20">
@@ -59,9 +62,7 @@ $currentUser = $currentUser ?? getCurrentUser();
                 
                 <!-- Logo & Judul Aplikasi -->
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
-                        <i class="fa-solid fa-layer-group text-xl"></i>
-                    </div>
+                    <img src="assets/img/logo.jpg" alt="Logo TaskFlow" class="w-10 h-10 rounded-xl object-contain p-0.5 bg-white border border-slate-200/80 shadow-sm">
                     <div>
                         <div class="flex items-center space-x-2">
                             <span class="text-xl font-bold bg-gradient-to-r from-slate-900 via-indigo-950 to-brand-700 bg-clip-text text-transparent">TaskFlow</span>

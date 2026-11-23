@@ -1,30 +1,43 @@
 <?php
 // ==============================================================================
 // FILE: auth.php
-// FUNGSI: Controller Autentikasi Pengguna (Login, Register, Logout)
-// PENJELASAN UNTUK UKK:
-// - Menggunakan PHP Session untuk menyimpan status login pengguna.
-// - Menggunakan PDO Prepared Statement untuk mencegah celah SQL Injection.
-// - Menggunakan password_hash() dengan algoritma BCRYPT / PASSWORD_DEFAULT 
-//   dan password_verify() untuk verifikasi kata sandi secara aman standar industri.
+// FUNGSI UTAMA: Controller Autentikasi Pengguna (Login, Register, Logout)
+//
+// 🎓 PANDUAN BELAJAR UKK:
+// - Menggunakan PHP Session ($_SESSION) untuk menyimpan status dan identitas user yang aktif.
+// - Menggunakan PDO Prepared Statements (:u1, :u2, dll) untuk mencegah celah SQL Injection.
+// - Menggunakan password_hash(..., PASSWORD_DEFAULT) dengan algoritma Bcrypt yang aman.
+// - Menggunakan password_verify() untuk membandingkan password plain-text dengan hash di database.
 // ==============================================================================
 
 require_once __DIR__ . '/config/database.php';
 
+// Pastikan koneksi database PDO tersedia
 $pdo = getDBConnection();
 if (!$pdo) {
     die("Koneksi database terputus. Pastikan MySQL di Laragon aktif.");
 }
 
+// Tangkap aksi yang diminta (contoh: action=login atau action=register)
 $action = $_REQUEST['action'] ?? '';
 
 switch ($action) {
 
     // ==========================================================================
     // 1. PROSES LOGIN PENGGUNA
-    // Method: POST
+    // Method: POST (dari form login.php)
     // ==========================================================================
     case 'login':
+        // 🎯 [FUNGSI]: Memverifikasi identitas pengguna berdasarkan Username atau Email dan Password
+        // 💡 [CARA KERJA]:
+        // 1. Menolak jika request bukan metode POST.
+        // 2. Membersihkan input username dan password.
+        // 3. Mengambil record user dari MySQL menggunakan query prepared statement.
+        // 4. Memverifikasi password menggunakan password_verify().
+        // 5. Jika cocok, session dibuat dan user diarahkan ke dashboard (index.php).
+        // ✏️ [TIPS MENGUBAH / UJIAN UKK]:
+        // Jika penguji bertanya: "Kenapa parameter di query :u1 dan :u2 dibedakan?"
+        // Jawab: "Karena beberapa driver PDO membutuhkan nama parameter unik untuk setiap placeholder!"
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header("Location: login.php");
             exit;
@@ -41,7 +54,7 @@ switch ($action) {
         }
 
         try {
-            // Cari user berdasarkan username ATAU email (gunakan nama parameter terpisah untuk kompatibilitas PDO)
+            // Cari user berdasarkan username ATAU email
             $stmt = $pdo->prepare("
                 SELECT * FROM `users` 
                 WHERE `username` = :u1 OR `email` = :u2 
@@ -64,6 +77,7 @@ switch ($action) {
                     'email'    => $user['email']
                 ];
 
+                // ✏️ [TIPS UJIAN UKK]: Pesan sambutan setelah login berhasil
                 setFlash('success', 'Selamat datang kembali, ' . htmlspecialchars($user['name']) . '! 👋');
                 header("Location: index.php");
                 exit;
@@ -81,9 +95,19 @@ switch ($action) {
 
     // ==========================================================================
     // 2. PROSES REGISTRASI PENGGUNA BARU
-    // Method: POST
+    // Method: POST (dari form register.php)
     // ==========================================================================
     case 'register':
+        // 🎯 [FUNGSI]: Mendaftarkan akun baru ke database MySQL
+        // 💡 [CARA KERJA]:
+        // 1. Validasi kelengkapan form, format email, format karakter username, dan konfirmasi password.
+        // 2. Mengecek apakah username/email sudah terdaftar di database (mencegah duplikasi).
+        // 3. Mengenkripsi password dengan password_hash($password, PASSWORD_DEFAULT).
+        // 4. Memasukkan data user ke tabel `users`.
+        // 5. Mengarahkan akun baru ke halaman Onboarding (welcome.php) tanpa agenda bawaan.
+        // ✏️ [TIPS MENGUBAH / UJIAN UKK]:
+        // Jika penguji meminta: "Minimal password diubah jadi 8 karakter",
+        // ubah 'strlen($password) < 6' menjadi 'strlen($password) < 8'.
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header("Location: register.php");
             exit;
@@ -102,7 +126,7 @@ switch ($action) {
             exit;
         }
 
-        // Validasi format email
+        // Validasi format email standar RFC
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             setFlash('danger', 'Format email tidak valid!');
             header("Location: register.php");
@@ -123,7 +147,7 @@ switch ($action) {
             exit;
         }
 
-        // Validasi konfirmasi password
+        // Validasi kesesuaian konfirmasi password
         if ($password !== $passwordConfirm) {
             setFlash('danger', 'Konfirmasi password tidak cocok dengan password yang dimasukkan!');
             header("Location: register.php");
@@ -131,7 +155,7 @@ switch ($action) {
         }
 
         try {
-            // Cek apakah username atau email sudah digunakan
+            // Cek apakah username atau email sudah digunakan sebelumnya
             $checkStmt = $pdo->prepare("
                 SELECT id FROM `users` 
                 WHERE `username` = :u OR `email` = :e 
@@ -161,34 +185,6 @@ switch ($action) {
 
             $newUserId = (int)$pdo->lastInsertId();
 
-            // Tambahkan 2 tugas pembuka sebagai contoh/panduan bagi akun baru
-            $sampleStmt = $pdo->prepare("
-                INSERT INTO `tasks` (`user_id`, `title`, `description`, `category`, `priority`, `status`, `due_date`, `start_time`, `due_time`)
-                VALUES (:uid, :title, :desc, :cat, :prio, :stat, :due, :start, :due_time)
-            ");
-            $sampleStmt->execute([
-                ':uid'      => $newUserId,
-                ':title'    => 'Selamat Datang di TaskFlow! 🎉',
-                ':desc'     => 'Coba geser (drag & drop) kartu ini ke kolom "Dalam Proses" atau "Selesai".',
-                ':cat'      => 'Umum',
-                ':prio'     => 'high',
-                ':stat'     => 'todo',
-                ':due'      => date('Y-m-d'),
-                ':start'    => '09:00:00',
-                ':due_time' => '17:00:00'
-            ]);
-            $sampleStmt->execute([
-                ':uid'      => $newUserId,
-                ':title'    => 'Jelajahi Kalender & Pengingat Waktu 📅',
-                ':desc'     => 'Klik tab "Kalender" di atas untuk melihat agenda bulanan real-time.',
-                ':cat'      => 'Belajar',
-                ':prio'     => 'medium',
-                ':stat'     => 'todo',
-                ':due'      => date('Y-m-d', strtotime('+1 day')),
-                ':start'    => '10:00:00',
-                ':due_time' => '12:00:00'
-            ]);
-
             // Otomatis login setelah pendaftaran sukses
             $_SESSION['user_id'] = $newUserId;
             $_SESSION['user'] = [
@@ -198,8 +194,8 @@ switch ($action) {
                 'email'    => $email
             ];
 
-            setFlash('success', 'Akun berhasil dibuat! Selamat datang di TaskFlow, ' . htmlspecialchars($name) . '! 🚀');
-            header("Location: index.php");
+            // Arahkan ke halaman sambutan (welcome.php) untuk akun baru
+            header("Location: welcome.php");
             exit;
 
         } catch (PDOException $e) {
@@ -214,7 +210,14 @@ switch ($action) {
     // Method: GET atau POST
     // ==========================================================================
     case 'logout':
-        // Hapus variabel session
+        // 🎯 [FUNGSI]: Menghapus seluruh sesi pengguna dan keluar dari sistem dengan aman
+        // 💡 [CARA KERJA]:
+        // 1. Mengosongkan variabel array $_SESSION = [].
+        // 2. Menghapus cookie session di browser client.
+        // 3. Menghancurkan session server dengan session_destroy().
+        // 4. Membuka session baru sebentar untuk membawa notifikasi flash 'info' ke halaman login.
+        // ✏️ [TIPS MENGUBAH / UJIAN UKK]:
+        // Ini adalah prosedur logout paling bersih dan aman sesuai standar keamanan PHP.
         $_SESSION = [];
         if (ini_get("session.use_cookies")) {
             $params = session_get_cookie_params();

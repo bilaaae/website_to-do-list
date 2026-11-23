@@ -57,6 +57,8 @@
                         <option value="Belajar">Belajar</option>
                         <option value="Keuangan">Keuangan</option>
                         <option value="Kesehatan">Kesehatan</option>
+                        <option value="Organisasi">Organisasi</option>
+                        <option value="UKK & LSP">UKK & LSP</option>
                     </select>
                 </div>
 
@@ -70,16 +72,11 @@
                 </div>
             </div>
 
-            <!-- Grid Tanggal, Jam Mulai & Jam Deadline -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <!-- Grid Tanggal & Jam Deadline -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Tanggal Agenda</label>
                     <input type="date" name="due_date" id="add-task-due-date" 
-                           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Jam Mulai</label>
-                    <input type="time" name="start_time" id="add-task-start-time" 
                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
                 </div>
                 <div>
@@ -119,7 +116,7 @@
                 <button type="button" class="btn-close-add-modal px-4 py-2 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-xl transition">
                     Batal
                 </button>
-                <button type="submit" class="px-5 py-2 text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-md shadow-brand-600/20 transition active:scale-95">
+                <button type="submit" id="btn-submit-add" class="px-5 py-2 text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-md shadow-brand-600/20 transition active:scale-95">
                     Simpan Tugas
                 </button>
             </div>
@@ -180,6 +177,8 @@
                         <option value="Belajar">Belajar</option>
                         <option value="Keuangan">Keuangan</option>
                         <option value="Kesehatan">Kesehatan</option>
+                        <option value="Organisasi">Organisasi</option>
+                        <option value="UKK & LSP">UKK & LSP</option>
                     </select>
                 </div>
 
@@ -193,16 +192,11 @@
                 </div>
             </div>
 
-            <!-- Grid Tanggal, Jam Mulai & Jam Deadline -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <!-- Grid Tanggal & Jam Deadline -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Tanggal Agenda</label>
                     <input type="date" name="due_date" id="edit-task-due-date" 
-                           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Jam Mulai</label>
-                    <input type="time" name="start_time" id="edit-task-start-time" 
                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
                 </div>
                 <div>
@@ -242,7 +236,7 @@
                 <button type="button" class="btn-close-edit-modal px-4 py-2 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-xl transition">
                     Batal
                 </button>
-                <button type="submit" class="px-5 py-2 text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-md shadow-brand-600/20 transition active:scale-95">
+                <button type="submit" id="btn-submit-edit" class="px-5 py-2 text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-md shadow-brand-600/20 transition active:scale-95">
                     Simpan Perubahan
                 </button>
             </div>

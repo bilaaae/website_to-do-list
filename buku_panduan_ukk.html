@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buku Panduan Lengkap & Bedah Kode UKK RPL - TaskFlow</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --secondary: #0ea5e9;
+            --dark: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+            --slate-600: #475569;
+            --slate-500: #64748b;
+            --slate-200: #e2e8f0;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--slate-800);
+            background: #ffffff;
+            line-height: 1.65;
+            font-size: 13.5px;
+        }
+
+        @page {
+            size: A4;
+            margin: 1.6cm 1.4cm 1.8cm 1.4cm;
+            @bottom-right {
+                content: counter(page);
+                font-family: 'Plus Jakarta Sans', sans-serif;
+                font-size: 9pt;
+                color: #94a3b8;
+            }
+        }
+
+        @media print {
+            body {
+                background: #ffffff;
+                font-size: 11pt;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            .cover-page {
+                height: 100vh;
+                page-break-after: always;
+            }
+        }
+
+        /* PRINT ACTION BAR */
+        .print-bar {
+            position: sticky;
+            top: 0;
+            z-index: 9999;
+            background: #0f172a;
+            color: #ffffff;
+            border-bottom: 2px solid var(--primary);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            padding: 12px 20px;
+        }
+
+        .print-bar-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .print-info strong {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #f8fafc;
+        }
+
+        .print-info span {
+            font-size: 11.5px;
+            color: #94a3b8;
+        }
+
+        .btn-print {
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-print:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-print:active {
+            transform: translateY(1px);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* COVER PAGE STYLES */
+        .cover-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 980px;
+            padding: 40px 20px;
+            border-bottom: 2px solid var(--slate-200);
+        }
+
+        .cover-badge {
+            display: inline-block;
+            background: #eef2ff;
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border: 1px solid #c7d2fe;
+            margin-bottom: 20px;
+        }
+
+        .cover-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--dark);
+            line-height: 1.25;
+            margin-bottom: 15px;
+        }
+
+        .cover-title span {
+            color: var(--primary);
+        }
+
+        .cover-subtitle {
+            font-size: 16px;
+            color: var(--slate-600);
+            max-width: 650px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        .cover-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 40px;
+            background: var(--slate-50);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid var(--slate-200);
+        }
+
+        .cover-meta-item strong {
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--slate-500);
+            margin-bottom: 4px;
+        }
+
+        .cover-meta-item p {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--slate-800);
+        }
+
+        /* TYPOGRAPHY */
+        h1, h2, h3, h4 {
+            color: var(--dark);
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        h2 {
+            font-size: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary);
+            margin: 35px 0 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            font-size: 16px;
+            margin: 22px 0 10px 0;
+            color: var(--slate-800);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        h4 {
+            font-size: 14px;
+            margin: 14px 0 6px 0;
+            color: var(--primary-dark);
+        }
+
+        p, ul, ol {
+            margin-bottom: 12px;
+            color: var(--slate-700);
+        }
+
+        ul, ol {
+            padding-left: 22px;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        /* CODE BLOCKS & INLINE CODE */
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            background: #f1f5f9;
+            color: #d946ef;
+            padding: 2px 6px;
+            border-radius: 5px;
+            border: 1px solid #e2e8f0;
+        }
+
+        pre {
+            background: #0f172a;
+            color: #f8fafc;
+            padding: 14px 16px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 12px 0 16px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            line-height: 1.55;
+            border: 1px solid #1e293b;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            border: none;
+            font-size: inherit;
+        }
+
+        /* BOXES & CARDS */
+        .callout {
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin: 14px 0;
+            border-left: 4px solid;
+            font-size: 13px;
+        }
+
+        .callout-tip {
+            background: #eef2ff;
+            border-left-color: var(--primary);
+            color: #312e81;
+        }
+
+        .callout-success {
+            background: #ecfdf5;
+            border-left-color: var(--success);
+            color: #064e3b;
+        }
+
+        .callout-warning {
+            background: #fffbeb;
+            border-left-color: var(--warning);
+            color: #78350f;
+        }
+
+        .callout-danger {
+            background: #fef2f2;
+            border-left-color: var(--danger);
+            color: #7f1d1d;
+        }
+
+        .qa-card {
+            background: #ffffff;
+            border: 1px solid var(--slate-200);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 14px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            page-break-inside: avoid;
+        }
+
+        .qa-question {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .qa-answer {
+            color: var(--slate-700);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .challenge-badge {
+            display: inline-block;
+            background: #fef3c7;
+            color: #b45309;
+            font-size: 10.5px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 12.5px;
+        }
+
+        th, td {
+            border: 1px solid var(--slate-200);
+            padding: 9px 12px;
+            text-align: left;
+        }
+
+        th {
+            background: var(--slate-100);
+            font-weight: 700;
+            color: var(--slate-800);
+        }
+
+        tr:nth-child(even) td {
+            background: var(--slate-50);
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOMBOL FLOATING PRINT / DOWNLOAD PDF -->
+<div class="print-bar no-print">
+    <div class="print-bar-inner">
+        <div class="print-info">
+            <strong>📘 BUKU PANDUAN LENGKAP & BEDAH KODE UKK RPL (TASKFLOW)</strong>
+            <span>Format A4 Siap Cetak &bull; 8 Bab Pembahasan Lengkap &bull; Kode, Pertanyaan & Tantangan</span>
+        </div>
+        <button onclick="window.print()" class="btn-print">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"></path><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 14h12v8H6z"></path></svg>
+            <span>Simpan / Cetak Sebagai PDF (Ctrl + P)</span>
+        </button>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- ==================================================================== -->
+    <!-- COVER PAGE                                                           -->
+    <!-- ==================================================================== -->
+    <div class="cover-page">
+        <div>
+            <div class="cover-badge">Buku Saku Persiapan Ujian UKK RPL 2026</div>
+            <h1 class="cover-title">Bedah Total Source Code &<br><span>Panduan Menjawab Penguji UKK</span></h1>
+            <p class="cover-subtitle">
+                Dokumentasi mendalam penjelasan setiap baris kode, arsitektur sistem, logika kondisional (if-else), 
+                skenario pertanyaan penguji, dan kunci jawaban tantangan live-coding aplikasi <strong>TaskFlow</strong>.
+            </p>
+        </div>
+
+        <div class="cover-meta-grid">
+            <div class="cover-meta-item">
+                <strong>Judul Aplikasi</strong>
+                <p>TaskFlow (To-Do List & Agenda Manajemen)</p>
+            </div>
+            <div class="cover-meta-item">
+                <strong>Target Ujian</strong>
+                <p>Uji Kompetensi Keahlian (UKK) Rekayasa Perangkat Lunak</p>
+            </div>
+            <div class="cover-meta-item">
+                <strong>Teknologi Utama</strong>
+                <p>PHP 8.4 (Native PDO) + MySQL + Tailwind CSS</p>
+            </div>
+            <div class="cover-meta-item">
+                <strong>Interaktivitas Frontend</strong>
+                <p>JavaScript ES6 (Fetch API, HTML5 Drag & Drop)</p>
+            </div>
+        </div>
+
+        <div style="border-top: 1px solid var(--slate-200); padding-top: 20px; font-size: 12px; color: var(--slate-500); display: flex; justify-content: space-between;">
+            <span>Paket Soal UKK: Aplikasi To-Do List Real-Time Multi-User</span>
+            <span>Versi Dokumen: 1.0 (Edisi Siap Sidang)</span>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==================================================================== -->
+    <!-- BAB 1: ARSITEKTUR & DESAIN DATABASE                                 -->
+    <!-- ==================================================================== -->
+    <h2>📑 BAB 1: Gambaran Arsitektur & Skema Database</h2>
+
+    <p>
+        Aplikasi <strong>TaskFlow</strong> dibangun menggunakan arsitektur modular yang memisahkan logika backend (Controller & Config) 
+        dari tampilan antarmuka (View Includes). Konsep ini mengadopsi prinsip <strong>Separation of Concerns (SoC)</strong> agar kode 
+        mudah dibaca, dirawat, dan diuji saat sidang UKK.
+    </p>
+
+    <h3>1.1 Pembagian Struktur Folder Aplikasi</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 28%;">Nama File / Folder</th>
+                <th>Fungsi Utama dalam Sistem</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>config/database.php</code></td>
+                <td>Pusat konfigurasi koneksi PDO, inisialisasi tabel otomatis, helper keamanan XSS (<code>e()</code>), format tanggal/waktu, dan session guard (<code>requireLogin()</code>).</td>
+            </tr>
+            <tr>
+                <td><code>auth.php</code></td>
+                <td>Controller autentikasi: menangani registrasi akun baru (dengan hashing password Bcrypt), proses login, dan pembersihan sesi saat logout.</td>
+            </tr>
+            <tr>
+                <td><code>actions.php</code></td>
+                <td>Controller CRUD tugas: menangani Create (Add), Read, Update data, Update Status (AJAX Drag & Drop), Toggle Selesai, dan Delete.</td>
+            </tr>
+            <tr>
+                <td><code>index.php</code></td>
+                <td>Dashboard utama: menghitung statistik produktivitas, filter kategori/prioritas, sorting deadline, dan perakitan komponen tampilan.</td>
+            </tr>
+            <tr>
+                <td><code>includes/sidebar.php</code></td>
+                <td>Sidebar navigasi kiri: tombol tambah agenda cepat, navigasi mode tampilan, dan filter kategori berbasis status aktif.</td>
+            </tr>
+            <tr>
+                <td><code>includes/toolbar.php</code></td>
+                <td>Bilah kontrol atas: pengurutan deadline, filter dropdown, dan kotak pencarian real-time (live search).</td>
+            </tr>
+            <tr>
+                <td><code>assets/js/dragdrop.js</code></td>
+                <td>Menangani event HTML5 Drag & Drop kartu tugas antar kolom status dan mengirimkan pembaruan ke backend via Fetch API (AJAX).</td>
+            </tr>
+            <tr>
+                <td><code>assets/js/app.js</code></td>
+                <td>Menangani interaktivitas modal pop-up (buka/tutup), binding data edit, live search instan, dan auto-dismiss notifikasi toast.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>1.2 Struktur Tabel Database MySQL (todolist_db)</h3>
+    <p>Sistem menggunakan 2 tabel yang berelasi logis melalui kolom <code>user_id</code>:</p>
+    
+    <h4>1. Tabel <code>users</code> (Data Akun Pengguna)</h4>
+    <ul>
+        <li><code>id (INT, PRIMARY KEY, AUTO_INCREMENT)</code>: ID unik pengguna.</li>
+        <li><code>name (VARCHAR 100)</code>: Nama lengkap pengguna.</li>
+        <li><code>username (VARCHAR 50, UNIQUE)</code>: Username untuk login (tidak boleh kembar).</li>
+        <li><code>email (VARCHAR 100, UNIQUE)</code>: Alamat email unik pengguna.</li>
+        <li><code>password (VARCHAR 255)</code>: Hash kata sandi terenkripsi menggunakan algoritma Bcrypt standar industri.</li>
+        <li><code>created_at (TIMESTAMP)</code>: Waktu pendaftaran akun.</li>
+    </ul>
+
+    <h4>2. Tabel <code>tasks</code> (Data Agenda & Tugas)</h4>
+    <ul>
+        <li><code>id (INT, PRIMARY KEY, AUTO_INCREMENT)</code>: ID unik tugas.</li>
+        <li><code>user_id (INT, INDEX)</code>: ID pemilik tugas (mengisolasi tugas agar tidak terlihat oleh user lain).</li>
+        <li><code>title (VARCHAR 255)</code>: Judul tugas atau agenda.</li>
+        <li><code>description (TEXT)</code>: Rincian catatan tambahan tugas.</li>
+        <li><code>category (VARCHAR 50)</code>: Kategori tugas (Umum, Pekerjaan, Pribadi, Belajar, Keuangan, Kesehatan, Organisasi, UKK).</li>
+        <li><code>priority (ENUM 'low', 'medium', 'high')</code>: Tingkat kepentingan (Rendah, Sedang, Tinggi).</li>
+        <li><code>status (ENUM 'todo', 'in_progress', 'completed')</code>: Status kolom Kanban (Belum Mulai, Dalam Proses, Selesai).</li>
+        <li><code>due_date (DATE)</code>: Tanggal batas waktu pengerjaan (YYYY-MM-DD).</li>
+        <li><code>due_time (TIME)</code>: Jam batas waktu deadline pengerjaan (HH:MM:SS).</li>
+        <li><code>created_at & updated_at (TIMESTAMP)</code>: Pencatatan waktu pembuatan dan perubahan otomatis.</li>
+    </ul>
+
+    <div class="page-break"></div>
+
+    <!-- ==================================================================== -->
+    <!-- BAB 2: BEDAH KODE config/database.php                                -->
+    <!-- ==================================================================== -->
+    <h2>⚙️ BAB 2: Bedah Kode config/database.php</h2>
+
+    <p>File ini adalah jantung backend aplikasi. Di sinilah koneksi, keamanan dasar, dan fungsi pembantu (helper) didefinisikan.</p>
+
+    <h3>2.1 Logika Koneksi PDO Singleton: <code>getDBConnection()</code></h3>
+    <pre><code>function getDBConnection() {
+    static $pdo = null;
+    if ($pdo !== null) {
+        return $pdo; // Singleton: cegah pembukaan koneksi berulang kali
+    }
+    try {
+        $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4";
+        $pdo = new PDO($dsn, DB_USER, DB_PASS, [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // Error dilempar sebagai Exception
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,       // Format hasil query berupa Array Asosiatif
+            PDO::ATTR_EMULATE_PREPARES   => false,                  // Prepared Statement Native dari MySQL engine
+        ]);
+        initDatabaseTables($pdo);
+        return $pdo;
+    } catch (PDOException $e) { ... }
+}</code></pre>
+    
+    <div class="callout callout-tip">
+        <strong>💡 Makna Kondisi & Konsep untuk UKK:</strong><br>
+        1. <code>static $pdo</code>: Menggunakan <em>Singleton Pattern</em>. Variabel statis tetap hidup selama satu siklus request web. Jika fungsi dipanggil 5 kali di berbagai file, koneksi ke MySQL hanya dibuat 1 kali, menghemat RAM dan resource server.<br>
+        2. <code>PDO::ATTR_EMULATE_PREPARES => false</code>: Mematikan emulasi PHP. Query dikirim langsung ke MySQL dalam 2 tahap terpisah (persiapan query lalu pengiriman nilai). Ini adalah proteksi anti SQL Injection paling sempurna.
+    </div>
+
+    <h3>2.2 Logika Penjaga Halaman: <code>requireLogin()</code> & <code>isLoggedIn()</code></h3>
+    <pre><code>function isLoggedIn() {
+    return isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
+}
+
+function requireLogin() {
+    if (!isLoggedIn()) {
+        setFlash('danger', 'Silakan login terlebih dahulu untuk mengakses aplikasi.');
+        header("Location: login.php");
+        exit; // Menghentikan eksekusi script seketika agar konten tidak bocor!
+    }
+}</code></pre>
+    <div class="callout callout-warning">
+        <strong>💡 Makna Kondisi if-else:</strong><br>
+        - <code>if (!isLoggedIn())</code>: Tanda seru (<code>!</code>) adalah operator logika NOT. Artinya: <em>"Jika pengguna TIDAK sedang login"</em>.<br>
+        - <code>exit;</code>: Sangat krusial! Perintah <code>header("Location: ...")</code> hanya mengirimkan header HTTP redirect ke browser, namun proses PHP di server akan terus berjalan ke baris bawahnya jika tidak dihentikan dengan <code>exit;</code>.
+    </div>
+
+    <h3>2.3 Logika Sanitasi XSS: <code>e($string)</code></h3>
+    <pre><code>function e($string) {
+    return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
+}</code></pre>
+    <p>
+        <strong>Makna:</strong> Fungsi ini mengubah karakter berbahaya seperti <code>&lt;script&gt;</code> menjadi entitas teks aman 
+        <code>&amp;lt;script&amp;gt;</code>. Tag berbahaya tidak akan dijalankan oleh browser korban, sehingga aplikasi 100% aman dari 
+        serangan <strong>Cross-Site Scripting (XSS)</strong>.
+    </p>
+
+    <h3>2.4 Logika Perhitungan Deadline: <code>getDeadlineStatus()</code></h3>
+    <pre><code>function getDeadlineStatus($dueDate, $dueTime, $isCompleted) {
+    if ($isCompleted || empty($dueDate)) {
+        return null; // Tugas selesai atau tidak punya deadline, abaikan!
+    }
+
+    $now = time(); // Waktu saat ini dalam detik Unix Timestamp
+    $timePart = !empty($dueTime) ? $dueTime : '23:59:59';
+    $dueTimestamp = strtotime($dueDate . ' ' . $timePart);
+    $diffSeconds = $dueTimestamp - $now; // Selisih detik batas waktu
+
+    // 1. Kondisi Terlambat (Waktu sudah lewat dari sekarang)
+    if ($diffSeconds < 0) {
+        return ['type' => 'overdue', 'label' => 'Terlambat!', ...];
+    }
+
+    // 2. Kondisi Mepet (Sisa waktu <= 6 jam = 21.600 detik)
+    if ($diffSeconds <= 21600) {
+        $hoursLeft = floor($diffSeconds / 3600);
+        $minsLeft  = floor(($diffSeconds % 3600) / 60);
+        return ['type' => 'super_urgent', 'label' => "Mepet! ($hoursLeft Jam $minsLeft Mnt Lagi)", ...];
+    }
+
+    // 3. Kondisi Hari Ini (Sisa waktu <= 24 jam & tanggal sama dengan hari ini)
+    if ($diffSeconds <= 86400 && date('Y-m-d', $dueTimestamp) === date('Y-m-d')) {
+        return ['type' => 'today', 'label' => 'Hari Ini', ...];
+    }
+
+    // 4. Kondisi Besok
+    $tomorrow = date('Y-m-d', strtotime('+1 day'));
+    if ($dueDate === $tomorrow) {
+        return ['type' => 'tomorrow', 'label' => 'Besok', ...];
+    }
+
+    return null;
+}</code></pre>
+
+    <div class="page-break"></div>
+
+    <!-- ==================================================================== -->
+    <!-- BAB 3: BEDAH KODE auth.php (AUTENTIKASI & KEAMANAN)                  -->
+    <!-- ==================================================================== -->
+    <h2>🔐 BAB 3: Bedah Kode auth.php (Login, Register, Logout)</h2>
+
+    <p>File ini memproses seluruh arus masuk dan keluar identitas pengguna aplikasi.</p>
+
+    <h3>3.1 Logika Registrasi & Enkripsi Kata Sandi (case 'register')</h3>
+    <pre><code>// 1. Validasi Input Kosong
+if (empty($name) || empty($username) || empty($email) || empty($password)) {
+    setFlash('danger', 'Semua kolom formulir pendaftaran wajib diisi!');
+    header("Location: register.php"); exit;
+}
+
+// 2. Validasi Format Email Menggunakan Filter Bawaan PHP
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    setFlash('danger', 'Format email tidak valid!');
+    header("Location: register.php"); exit;
+}
+
+// 3. Validasi Format Username dengan Regular Expression (Regex)
+if (!preg_match('/^[a-zA-Z0-9_]{3,30}$/', $username)) {
+    setFlash('danger', 'Username hanya boleh huruf, angka, underscore (3-30 karakter)!');
+    header("Location: register.php"); exit;
+}
+
+// 4. Validasi Kecocokan Konfirmasi Password
+if ($password !== $passwordConfirm) {
+    setFlash('danger', 'Konfirmasi password tidak cocok dengan password yang dimasukkan!');
+    header("Location: register.php"); exit;
+}
+
+// 5. Cek Duplikasi Akun di Database
+$checkStmt = $pdo->prepare("SELECT id FROM users WHERE username = :u OR email = :e LIMIT 1");
+$checkStmt->execute([':u' => $username, ':e' => $email]);
+if ($checkStmt->fetch()) {
+    setFlash('danger', 'Username atau Email sudah terdaftar!');
+    header("Location: register.php"); exit;
+}
+
+// 6. Enkripsi Password (Bcrypt Hash Standar Industri)
+$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+// 7. Simpan ke Database
+$insertStmt = $pdo->prepare("INSERT INTO users (name, username, email, password) VALUES (:n, :u, :e, :p)");
+$insertStmt->execute([':n' => $name, ':u' => $username, ':e' => $email, ':p' => $hashedPassword]);</code></pre>
+
+    <div class="callout callout-success">
+        <strong>💡 Makna Teknis:</strong><br>
+        - <code>password_hash(..., PASSWORD_DEFAULT)</code>: Menggunakan algoritma pengacakan <strong>Bcrypt</strong> dengan garam (*salt*) acak otomatis. Password tidak pernah disimpan dalam bentuk teks biasa (plain text), sehingga jika database diretas sekalipun, kata sandi pengguna tidak akan bisa dibaca.<br>
+        - <code>preg_match('/^[a-zA-Z0-9_]{3,30}$/', $username)</code>: Mencegah username mengandung spasi atau simbol berbahaya.
+    </div>
+
+    <h3>3.2 Logika Login & Verifikasi Kata Sandi (case 'login')</h3>
+    <pre><code>// Cari user berdasarkan username ATAU email
+$stmt = $pdo->prepare("SELECT * FROM users WHERE username = :u1 OR email = :u2 LIMIT 1");
+$stmt->execute([':u1' => $username, ':u2' => $username]);
+$user = $stmt->fetch();
+
+// Verifikasi kecocokan hash password dengan inputan teks pengguna
+if ($user && password_verify($password, $user['password'])) {
+    // Berhasil! Simpan id dan profil user ke SESSION
+    $_SESSION['user_id'] = (int)$user['id'];
+    $_SESSION['user'] = [
+        'id'       => (int)$user['id'],
+        'name'     => $user['name'],
+        'username' => $user['username'],
+        'email'    => $user['email']
+    ];
+    header("Location: index.php"); exit;
+} else {
+    setFlash('danger', 'Username/Email atau Password salah!');
+    header("Location: login.php"); exit;
+}</code></pre>
+
+    <div class="page-break"></div>
+
+    <!-- ==================================================================== -->
+    <!-- BAB 4: BEDAH KODE actions.php (CRUD & AJAX DRAG & DROP)             -->
+    <!-- ==================================================================== -->
+    <h2>⚡ BAB 4: Bedah Kode actions.php (CRUD & AJAX Controller)</h2>
+
+    <h3>4.1 Menambah Tugas Baru (case 'add')</h3>
+    <pre><code>$title       = trim($_POST['title'] ?? '');
+$description = trim($_POST['description'] ?? '');
+$category    = trim($_POST['category'] ?? 'Umum');
+$priority    = trim($_POST['priority'] ?? 'medium');
+$status      = trim($_POST['status'] ?? 'todo');
+$due_date    = !empty($_POST['due_date']) ? $_POST['due_date'] : null;
+$due_time    = !empty($_POST['due_time']) ? $_POST['due_time'] : null;
+
+// Validasi Wajib Isi
+if (empty($title)) {
+    setFlash('danger', 'Judul tugas wajib diisi!');
+    header("Location: index.php"); exit;
+}
+
+// Validasi Keamanan Nilai ENUM (Mencegah manipulasi value HTML)
+if (!in_array($priority, ['low', 'medium', 'high'])) $priority = 'medium';
+if (!in_array($status, ['todo', 'in_progress', 'completed'])) $status = 'todo';
+
+$stmt = $pdo->prepare("
+    INSERT INTO tasks (user_id, title, description, category, priority, status, due_date, due_time)
+    VALUES (:uid, :title, :description, :category, :priority, :status, :due_date, :due_time)
+");
+$stmt->execute([
+    ':uid'         => $currentUserId,
+    ':title'       => $title,
+    ':description' => $description ?: null,
+    ':category'    => $category ?: 'Umum',
+    ':priority'    => $priority,
+    ':status'      => $status,
+    ':due_date'    => $due_date,
+    ':due_time'    => $due_time
+]);</code></pre>
+
+    <h3>4.2 Menerima AJAX Drag & Drop Real-Time (case 'update_status')</h3>
+    <pre><code>// 1. Deteksi apakah request berupa JSON dari Fetch API (Drag & Drop)
+$isAjax = false;
+$rawInput = file_get_contents('php://input');
+if (!empty($rawInput)) {
+    $jsonData = json_decode($rawInput, true);
+    if (json_last_error() === JSON_ERROR_NONE && !empty($jsonData)) {
+        $taskId    = (int)($jsonData['id'] ?? 0);
+        $newStatus = $jsonData['status'] ?? '';
+        $isAjax    = true;
+    }
+}
+
+// 2. Eksekusi Update Status Khusus Tugas Milik Pengguna Ini
+$stmt = $pdo->prepare("UPDATE tasks SET status = :status WHERE id = :id AND user_id = :uid");
+$stmt->execute([':status' => $newStatus, ':id' => $taskId, ':uid' => $currentUserId]);
+
+// 3. Jika Request Berasal dari AJAX, Kembalikan Respons Berupa JSON
+if ($isAjax) {
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode([
+        'success' => true,
+        'message' => 'Status tugas berhasil diperbarui secara real-time!',
+        'id'      => $taskId,
+        'status'  => $newStatus
+    ]);
+    exit; // Hentikan script, tidak perlu me-redirect halaman!
+}</code></pre>
+
+    <div class="callout callout-tip">
+        <strong>💡 Makna Penting untuk UKK:</strong><br>
+        - <code>file_get_contents('php://input')</code>: Membaca raw data JSON yang dikirimkan oleh <code>fetch()</code> dari JavaScript.<br>
+        - <code>header('Content-Type: application/json')</code>: Memberitahu browser bahwa balasan dari server adalah format data JSON murni, bukan dokumen HTML biasa.<br>
+        - <code>WHERE id = :id AND user_id = :uid</code>: Kunci keamanan tingkat tinggi! Mencegah user lain mengubah data orang lain hanya dengan menebak angka ID.
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==================================================================== -->
+    <!-- BAB 5: BEDAH JAVASCRIPT FRONTEND (dragdrop.js & app.js)             -->
+    <!-- ==================================================================== -->
+    <h2>💻 BAB 5: Bedah Kode JavaScript Interaktif</h2>
+
+    <h3>5.1 HTML5 Drag & Drop & Fetch API: <code>assets/js/dragdrop.js</code></h3>
+    <pre><code>// 1. Event Ketika Kartu Mulai Digeser (dragstart)
+card.addEventListener('dragstart', (e) => {
+    draggedCard = card;
+    card.classList.add('opacity-50', 'scale-[1.02]'); // Efek transparan saat diangkat
+    e.dataTransfer.setData('text/plain', card.dataset.id); // Simpan ID tugas
+});
+
+// 2. Event Ketika Kartu Melayang di Atas Kolom (dragover)
+zone.addEventListener('dragover', (e) => {
+    e.preventDefault(); // WAJIB! Mengizinkan elemen untuk dilepas (drop)
+    zone.classList.add('bg-brand-50/50', 'border-brand-400'); // Efek highlight kolom target
+});
+
+// 3. Event Ketika Kartu Dilepas ke Kolom Baru (drop)
+zone.addEventListener('drop', async (e) => {
+    e.preventDefault();
+    if (!draggedCard) return;
+
+    const newStatus = zone.dataset.status; // todo, in_progress, atau completed
+    const taskId    = draggedCard.dataset.id;
+
+    // A. Pindahkan kartu langsung di DOM layar pengguna (Instan!)
+    container.appendChild(draggedCard);
+
+    // B. Kirim pembaruan ke server database via Fetch API (Background AJAX)
+    try {
+        const response = await fetch('actions.php?action=update_status', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: taskId, status: newStatus })
+        });
+        const result = await response.json();
+        if (result.success) {
+            updateColumnBadges(); // Perbarui angka jumlah tugas di atas kolom
+            showQuickToast('Status tugas berhasil diperbarui! 🚀');
+        }
+    } catch (error) {
+        showQuickToast('Koneksi gagal saat memindahkan tugas!', 'danger');
+    }
+});</code></pre>
+
+    <h3>5.2 Logika Live Search Instan di Sisi Browser: <code>assets/js/app.js</code></h3>
+    <pre><code>const searchInput = document.getElementById('search-task-input');
+searchInput.addEventListener('input', (e) => {
+    const keyword = e.target.value.toLowerCase().trim();
+    const taskCards = document.querySelectorAll('.task-card');
+
+    taskCards.forEach((card) => {
+        // Ambil judul dan deskripsi dari kartu
+        const title = card.querySelector('.task-title')?.textContent.toLowerCase() || '';
+        const desc  = card.querySelector('.task-desc')?.textContent.toLowerCase() || '';
+
+        // Jika teks judul atau deskripsi mengandung kata kunci pencarian
+        if (title.includes(keyword) || desc.includes(keyword)) {
+            card.style.display = ''; // Tampilkan
+        } else {
+            card.style.display = 'none'; // Sembunyikan
+        }
+    });
+});</code></pre>
+    <div class="callout callout-success">
+        <strong>💡 Makna Teknis:</strong> Fitur pencarian ini berjalan di sisi <strong>Client-Side (Browser)</strong> tanpa mengirim request berulang ke database, sehingga pencarian terasa secepat kilat (*zero latency*) saat pengguna mengetik huruf demi huruf.
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==================================================================== -->
+    <!-- BAB 6: 12 PERTANYAAN PENGUJI UKK & KUNCI JAWABAN TEKNIS            -->
+    <!-- ==================================================================== -->
+    <h2>🎯 BAB 6: 12 Pertanyaan Penguji UKK & Kunci Jawaban Jitu</h2>
+
+    <div class="qa-card">
+        <div class="qa-question">1. Mengapa memilih koneksi PDO dibanding fungsi mysqli_connect()?</div>
+        <div class="qa-answer">
+            <strong>Jawaban:</strong><br>
+            "PDO (PHP Data Objects) memiliki 3 keunggulan utama:<br>
+            1. <strong>Mendukung Prepared Statements Asli</strong> secara terstruktur untuk mencegah serangan SQL Injection.<br>
+            2. <strong>Penanganan Error Menggunakan Exception</strong> (Try-Catch), sehingga error teknis database tidak bocor ke layar pengguna.<br>
+            3. <strong>Database Abstraction</strong>: Jika di masa depan sekolah ingin berganti dari MySQL ke PostgreSQL atau SQLite, kode aplikasi tidak perlu dirombak total."
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="qa-question">2. Bagaimana cara kerja sistem keamanan aplikasi Anda dalam mencegah SQL Injection?</div>
+        <div class="qa-answer">
+            <strong>Jawaban:</strong><br>
+            "Aplikasi menerapkan <strong>PDO Prepared Statements dengan Named Parameters</strong> (contohnya <code>:title</code>, <code>:status</code>, <code>:uid</code>) di seluruh query SQL (seperti pada <code>actions.php</code>). Parameter dikirim terpisah dari struktur perintah SQL, sehingga input berbahaya seperti kutip tunggal (<code>' OR '1'='1</code>) diperlakukan murni sebagai teks biasa dan tidak dapat memanipulasi logika query."
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="qa-question">3. Bagaimana cara aplikasi Anda menangkal serangan Cross-Site Scripting (XSS)?</div>
+        <div class="qa-answer">
+            <strong>Jawaban:</strong><br>
+            "Setiap data masukan pengguna yang akan dicetak ke dalam elemen HTML selalu dilewatkan melalui fungsi helper <code>e()</code> di <code>config/database.php</code>, yang membungkus <code>htmlspecialchars(..., ENT_QUOTES, 'UTF-8')</code>. Karakter khusus HTML seperti <code>&lt;</code>, <code>&gt;</code>, dan <code>&quot;</code> diubah menjadi entitas HTML aman (contoh: <code>&amp;lt;script&amp;gt;</code>), sehingga kode JavaScript berbahaya tidak bisa dieksekusi di browser pengunjung."
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="qa-question">4. Bagaimana kata sandi pengguna diamankan di dalam database? Apakah pakai MD5?</div>
+        <div class="qa-answer">
+            <strong>Jawaban:</strong><br>
+            "Tidak memakai MD5 atau SHA1 karena kedua algoritma tersebut sudah usang dan rentan dibobol menggunakan <em>Rainbow Table</em>. Aplikasi kami menggunakan fungsi bawaan PHP <code>password_hash($password, PASSWORD_DEFAULT)</code> yang menerapkan algoritma enkripsi <strong>Bcrypt</strong> dengan garam acak (*salt*) dan beban komputasi dinamis. Untuk memvalidasinya saat login, kami menggunakan <code>password_verify()</code>."
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="qa-question">5. Apa fungsi dari klausa 'WHERE user_id = :uid' di setiap query tugas?</div>
+        <div class="qa-answer">
+            <strong>Jawaban:</strong><br>
+            "Fungsinya untuk <strong>Data Isolation (Pemisahan Hak Akses Multi-User)</strong>. Ini menjamin pengguna A tidak bisa melihat, mengedit, atau menghapus data agenda milik pengguna B, meskipun pengguna A mencoba memanipulasi angka ID tugas di URL atau formulir."
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="qa-question">6. Apa fungsi e.preventDefault() pada script Drag & Drop?</div>
+        <div class="qa-answer">
+            <strong>Jawaban:</strong><br>
+            "Secara bawaan (*default*), browser web melarang sebuah elemen HTML untuk dijatuhkan (*drop*) ke elemen lain. Memanggil <code>e.preventDefault()</code> di dalam event <code>dragover</code> membatalkan perilaku bawaan browser tersebut sehingga event <code>drop</code> diizinkan berjalan."
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <div class="qa-card">
+        <div class="qa-question">7. Apa perbedaan antara Session dan Cookie pada sistem web Anda?</div>
+        <div class="qa-answer">
+            <strong>Jawaban:</strong><br>
+            "<strong>Session</strong> disimpan di sisi server (aman untuk menyimpan identitas login seperti <code>user_id</code> dan profil akun). Sedangkan <strong>Cookie</strong> disimpan di sisi browser client (hanya digunakan untuk menyimpan ID sesi unik seperti <code>PHPSESSID</code> untuk menghubungkan browser dengan sesi di server)."
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="qa-question">8. Bagaimana alur kerja AJAX saat kartu tugas digeser (Drag & Drop)?</div>
+        <div class="qa-answer">
+            <strong>Jawaban:</strong><br>
+            "1. Pengguna menggeser kartu ke kolom status baru.<br>
+            2. JavaScript menangkap event <code>drop</code>, lalu memindahkan posisi kartu di layar secara instan (DOM manipulation).<br>
+            3. JavaScript mengirimkan payload JSON berisi ID tugas dan status baru ke <code>actions.php?action=update_status</code> menggunakan <code>fetch()</code> secara asinkron (*background*).<br>
+            4. Server MySQL mengupdate kolom status dan membalas dengan status JSON <code>{ success: true }</code> tanpa perlu memuat ulang (*refresh*) halaman."
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="qa-question">9. Apa itu Singleton Pattern pada koneksi database?</div>
+        <div class="qa-answer">
+            <strong>Jawaban:</strong><br>
+            "Singleton Pattern memastikan bahwa sebuah class atau objek (dalam hal ini objek koneksi PDO) hanya dibuat **tepat satu kali saja** selama siklus hidup satu HTTP request. Variabel <code>static $pdo</code> di <code>getDBConnection()</code> menyimpan objek koneksi pertama. Panggilan berikutnya hanya mengembalikan objek yang sudah ada tanpa membuka socket koneksi baru ke MySQL."
+        </div>
+    </div>
+
+    <div class="qa-card">
+        <div class="qa-question">10. Bagaimana cara kerja Flash Message pada aplikasi ini?</div>
+        <div class="qa-answer">
+            <strong>Jawaban:</strong><br>
+            "Flash Message adalah pesan notifikasi sementara yang disimpan di session (<code>$_SESSION['flash']</code>). Saat fungsi <code>getFlash()</code> dipanggil di tampilan, ia mengambil data pesan lalu langsung menjalankan <code>unset($_SESSION['flash'])</code>. Dengan cara ini, pesan notifikasi hanya muncul 1 kali dan otomatis hilang saat halaman di-refresh."
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==================================================================== -->
+    <!-- BAB 7: 6 TANTANGAN LIVE-CODING UKK BESERTA KUNCI JAWABANNYA          -->
+    <!-- ==================================================================== -->
+    <h2>🛠️ BAB 7: Kumpulan Tantangan Live-Coding UKK & Solusinya</h2>
+
+    <p>Penguji sering kali menguji pemahaman siswa dengan meminta perubahan kode secara langsung di tempat (*live-coding*). Berikut adalah kumpulan skenario tantangan paling sering keluar beserta solusinya:</p>
+
+    <!-- CHALLENGE 1 -->
+    <div class="qa-card">
+        <span class="challenge-badge">Tantangan Live-Coding 1</span>
+        <div class="qa-question">"Tolong ubah batas waktu tugas berstatus 'Mepet' dari 6 jam menjadi 3 jam atau 12 jam!"</div>
+        <div class="qa-answer">
+            <strong>File yang dibuka:</strong> <code>config/database.php</code> (sekitar baris 320)<br>
+            <strong>Cari baris kode:</strong>
+            <pre><code>if ($diffSeconds <= 21600) { ... }</code></pre>
+            <strong>Ubah menjadi:</strong>
+            <ul>
+                <li>Jika diminta <strong>3 Jam</strong>: ganti angka menjadi <code>10800</code> (hasil dari $3 \times 3600$).</li>
+                <li>Jika diminta <strong>12 Jam</strong>: ganti angka menjadi <code>43200</code> (hasil dari $12 \times 3600$).</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- CHALLENGE 2 -->
+    <div class="qa-card">
+        <span class="challenge-badge">Tantangan Live-Coding 2</span>
+        <div class="qa-question">"Tambahkan validasi: Judul tugas tidak boleh kosong DAN minimal harus 5 karakter!"</div>
+        <div class="qa-answer">
+            <strong>File yang dibuka:</strong> <code>actions.php</code> (sekitar baris 53)<br>
+            <strong>Cari baris kode:</strong>
+            <pre><code>if (empty($title)) {
+    setFlash('danger', 'Judul tugas wajib diisi!');
+    header("Location: index.php"); exit;
+}</code></pre>
+            <strong>Ganti dengan:</strong>
+            <pre><code>if (empty($title) || strlen($title) < 5) {
+    setFlash('danger', 'Judul tugas wajib diisi dan minimal 5 karakter!');
+    header("Location: index.php"); exit;
+}</code></pre>
+        </div>
+    </div>
+
+    <!-- CHALLENGE 3 -->
+    <div class="qa-card">
+        <span class="challenge-badge">Tantangan Live-Coding 3</span>
+        <div class="qa-question">"Tambahkan opsi Kategori baru bernama 'Proyek Sekolah' di formulir Tambah Agenda!"</div>
+        <div class="qa-answer">
+            <strong>Langkah 1:</strong> Buka <code>includes/modals.php</code>, cari dropdown kategori di formulir tambah tugas.<br>
+            <strong>Langkah 2:</strong> Tambahkan baris tag <code>&lt;option&gt;</code> berikut:
+            <pre><code>&lt;option value="Proyek Sekolah"&gt;Proyek Sekolah&lt;/option&gt;</code></pre>
+            <strong>Langkah 3:</strong> Buka <code>index.php</code> (baris 32), tambahkan ke array kategori default:
+            <pre><code>$categories = ['Umum', 'Pekerjaan', 'Pribadi', 'Belajar', 'Keuangan', 'Kesehatan', 'Organisasi', 'UKK & LSP', 'Proyek Sekolah'];</code></pre>
+        </div>
+    </div>
+
+    <!-- CHALLENGE 4 -->
+    <div class="qa-card">
+        <span class="challenge-badge">Tantangan Live-Coding 4</span>
+        <div class="qa-question">"Tambahkan opsi Pengurutan (Sorting) baru: Urutkan Judul Berdasarkan Abjad A ke Z!"</div>
+        <div class="qa-answer">
+            <strong>Langkah 1:</strong> Buka <code>index.php</code> (sekitar baris 115), di dalam <code>switch ($currentSort)</code>, tambahkan case baru:
+            <pre><code>case 'title_asc':
+    $sql .= " ORDER BY title ASC";
+    break;</code></pre>
+            <strong>Langkah 2:</strong> Buka <code>includes/toolbar.php</code>, tambahkan opsi dropdown di dalam select sorting:
+            <pre><code>&lt;option value="title_asc" &lt;?= $currentSort === 'title_asc' ? 'selected' : '' ?&gt;&gt;
+    🔤 Judul: A &rarr; Z
+&lt;/option&gt;</code></pre>
+        </div>
+    </div>
+
+    <!-- CHALLENGE 5 -->
+    <div class="qa-card">
+        <span class="challenge-badge">Tantangan Live-Coding 5</span>
+        <div class="qa-question">"Ubah durasi notifikasi pop-up toast agar hilang lebih cepat (misal dari 4 detik jadi 2 detik)!"</div>
+        <div class="qa-answer">
+            <strong>File yang dibuka:</strong> <code>assets/js/app.js</code> (sekitar baris 26)<br>
+            <strong>Cari baris kode:</strong>
+            <pre><code>setTimeout(() => {
+    toast.remove();
+}, 4000); // 4000 milidetik = 4 detik</code></pre>
+            <strong>Ubah angka menjadi:</strong>
+            <pre><code>setTimeout(() => {
+    toast.remove();
+}, 2000); // 2000 milidetik = 2 detik</code></pre>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==================================================================== -->
+    <!-- BAB 8: PANDUAN STRATEGI PRESENTASI DI DEPAN PENGUJI                 -->
+    <!-- ==================================================================== -->
+    <h2>🎤 BAB 8: Strategi Presentasi & Urutan Demo Fitur di Depan Penguji</h2>
+
+    <p>
+        Kesan pertama sangat menentukan nilai kelulusan UKK. Ikuti alur demo sistem berikut agar seluruh fitur unggulan 
+        aplikasi kamu terpamerkan dengan rapi, terstruktur, dan profesional:
+    </p>
+
+    <div class="callout callout-tip">
+        <strong>📋 Urutan Demo Pengujian Aplikasi:</strong><br>
+        <strong>1. Registrasi Akun Baru:</strong> Buka <code>register.php</code>, buat akun baru. Tunjukkan bahwa setelah register berhasil, sistem langsung mengarahkan ke halaman Onboarding Sambutan (<code>welcome.php</code>).<br><br>
+        <strong>2. Menambah Agenda Baru:</strong> Klik tombol "+ Tambah Agenda". Isi judul, kategori, prioritas, tanggal, dan jam deadline. Tunjukkan bahwa validasi bekerja jika judul sengaja dikosongkan.<br><br>
+        <strong>3. Fitur Drag & Drop (Kanban):</strong> Geser kartu tugas dari kolom <em>"Belum Mulai"</em> ke <em>"Dalam Proses"</em> lalu ke <em>"Selesai Dikerjakan"</em>. Tunjukkan bahwa badge counter dan persentase progres di atas berubah otomatis secara real-time tanpa reload halaman.<br><br>
+        <strong>4. Live Search:</strong> Ketikkan kata kunci pada kolom pencarian. Tunjukkan bahwa kartu tugas terfilter secara instan.<br><br>
+        <strong>5. Mode Tampilan:</strong> Beralih ke mode <em>"Daftar List"</em> (tunjukkan tombol checklist toggle) dan mode <em>"Kalender Agenda"</em> (tunjukkan tanggal agenda yang terplot rapi di kotak tanggal kalender).<br><br>
+        <strong>6. Logout & Keamanan:</strong> Klik tombol Logout, lalu coba tekan tombol "Back" di browser. Tunjukkan bahwa Route Guard (<code>requireLogin()</code>) menolak akses dan mengembalikan pengguna ke halaman login.
+    </div>
+
+    <div style="margin-top: 50px; text-align: center; border-top: 2px dashed var(--slate-200); padding-top: 30px;">
+        <h3 style="color: var(--primary); margin-bottom: 8px;">Semoga Sukses dalam Ujian Kompetensi Keahlian (UKK) RPL! 🎓</h3>
+        <p style="font-size: 13px; color: var(--slate-500);">
+            Kuasai konsep dasar (CRUD, Session, PDO Prepared Statement, Sanitasi XSS), tetap tenang, dan percaya diri saat menjelaskan kode Anda!
+        </p>
+    </div>
+
+</div>
+
+</body>
+</html>

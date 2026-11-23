@@ -12,7 +12,7 @@ $currentCategory = $currentCategory ?? 'all';
 $currentPriority = $currentPriority ?? 'all';
 $currentSort     = $currentSort ?? 'deadline_asc';
 $searchQuery     = $searchQuery ?? '';
-$categories      = $categories ?? ['Umum', 'Pekerjaan', 'Pribadi', 'Belajar', 'Keuangan', 'Kesehatan'];
+$categories      = $categories ?? ['Umum', 'Pekerjaan', 'Pribadi', 'Belajar', 'Keuangan', 'Kesehatan', 'Organisasi', 'UKK & LSP'];
 $stats           = $stats ?? ['completed' => 0];
 
 // Parameter bulan dan tahun aktif untuk kalender
@@ -20,32 +20,41 @@ $calMonth = $calMonth ?? (int)date('n');
 $calYear  = $calYear ?? (int)date('Y');
 ?>
 <section class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm mb-6">
-    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+    <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-3">
+        <!-- SISI KIRI: Kotak Pencarian & Pilihan Mode -->
+        <div class="flex flex-wrap items-center gap-3">
+            <!-- Kotak Pencarian Real-Time -->
+            <div class="relative w-56 sm:w-64 shrink-0">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                <input type="text" id="search-task-input" placeholder="Cari agenda/tugas..." value="<?= e($searchQuery) ?>" 
+                       class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-3 py-2 text-xs text-slate-700 placeholder-slate-400 focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+            </div>  
         
-        <!-- Pilihan 3 Mode Tampilan: Papan Kanban, Daftar List, dan Kalender Agenda -->
-        <div class="flex items-center space-x-2">
-            <span class="text-xs font-semibold text-slate-500 hidden sm:inline">Mode:</span>
-            <div class="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200 overflow-x-auto">
-                <!-- 1. Papan Kanban -->
-                <a href="?view=kanban&sort=<?= urlencode($currentSort) ?>&category=<?= urlencode($currentCategory) ?>&priority=<?= urlencode($currentPriority) ?>&q=<?= urlencode($searchQuery) ?>" 
-                   class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition whitespace-nowrap <?= $viewMode === 'kanban' ? 'bg-white text-brand-600 shadow-sm' : 'text-slate-600 hover:text-slate-900' ?>">
-                    <i class="fa-solid fa-table-columns"></i>
-                    <span>Kanban (Drag & Drop)</span>
-                </a>
-                
-                <!-- 2. Daftar List -->
-                <a href="?view=list&sort=<?= urlencode($currentSort) ?>&category=<?= urlencode($currentCategory) ?>&priority=<?= urlencode($currentPriority) ?>&q=<?= urlencode($searchQuery) ?>" 
-                   class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition whitespace-nowrap <?= $viewMode === 'list' ? 'bg-white text-brand-600 shadow-sm' : 'text-slate-600 hover:text-slate-900' ?>">
-                    <i class="fa-solid fa-list-ul"></i>
-                    <span>Daftar List</span>
-                </a>
+            <!-- Pilihan 3 Mode Tampilan: Papan Kanban, Daftar List, dan Kalender Agenda -->
+            <div class="flex items-center space-x-2">
+                <span class="text-xs font-semibold text-slate-500 hidden sm:inline">Mode:</span>
+                <div class="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200 overflow-x-auto">
+                    <!-- 1. Papan Kanban -->
+                    <a href="?view=kanban&sort=<?= urlencode($currentSort) ?>&category=<?= urlencode($currentCategory) ?>&priority=<?= urlencode($currentPriority) ?>&q=<?= urlencode($searchQuery) ?>" 
+                       class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition whitespace-nowrap <?= $viewMode === 'kanban' ? 'bg-white text-brand-600 shadow-sm' : 'text-slate-600 hover:text-slate-900' ?>">
+                        <i class="fa-solid fa-table-columns"></i>
+                        <span>Kanban (Drag & Drop)</span>
+                    </a>
+                    
+                    <!-- 2. Daftar List -->
+                    <a href="?view=list&sort=<?= urlencode($currentSort) ?>&category=<?= urlencode($currentCategory) ?>&priority=<?= urlencode($currentPriority) ?>&q=<?= urlencode($searchQuery) ?>" 
+                       class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition whitespace-nowrap <?= $viewMode === 'list' ? 'bg-white text-brand-600 shadow-sm' : 'text-slate-600 hover:text-slate-900' ?>">
+                        <i class="fa-solid fa-list-ul"></i>
+                        <span>Daftar List</span>
+                    </a>
 
-                <!-- 3. Kalender Agenda -->
-                <a href="?view=calendar&month=<?= $calMonth ?>&year=<?= $calYear ?>&sort=<?= urlencode($currentSort) ?>&category=<?= urlencode($currentCategory) ?>&priority=<?= urlencode($currentPriority) ?>&q=<?= urlencode($searchQuery) ?>" 
-                   class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition whitespace-nowrap <?= $viewMode === 'calendar' ? 'bg-white text-brand-600 shadow-sm' : 'text-slate-600 hover:text-slate-900' ?>">
-                    <i class="fa-regular fa-calendar-days text-brand-600"></i>
-                    <span>Kalender Agenda</span>
-                </a>
+                    <!-- 3. Kalender Agenda -->
+                    <a href="?view=calendar&month=<?= $calMonth ?>&year=<?= $calYear ?>&sort=<?= urlencode($currentSort) ?>&category=<?= urlencode($currentCategory) ?>&priority=<?= urlencode($currentPriority) ?>&q=<?= urlencode($searchQuery) ?>" 
+                       class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition whitespace-nowrap <?= $viewMode === 'calendar' ? 'bg-white text-brand-600 shadow-sm' : 'text-slate-600 hover:text-slate-900' ?>">
+                        <i class="fa-regular fa-calendar-days text-brand-600"></i>
+                        <span>Kalender Agenda</span>
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -66,7 +75,7 @@ $calYear  = $calYear ?? (int)date('Y');
                 <div class="relative">
                     <select name="sort" onchange="this.form.submit()" 
                             class="bg-slate-50 border border-slate-200 text-slate-700 text-xs font-medium rounded-xl pl-7 pr-3 py-2 focus:ring-2 focus:ring-brand-500 focus:outline-none transition cursor-pointer">
-                        <option value="deadline_asc" <?= $currentSort === 'deadline_asc' ? 'selected' : '' ?>>
+                          <option value="deadline_asc" <?= $currentSort === 'deadline_asc' ? 'selected' : '' ?>>
                             ⏳ Deadline: Terdekat &rarr; Terjauh
                         </option>
                         <option value="deadline_desc" <?= $currentSort === 'deadline_desc' ? 'selected' : '' ?>>
@@ -121,12 +130,7 @@ $calYear  = $calYear ?? (int)date('Y');
                 </select>
             </form>
 
-            <!-- Kotak Pencarian Real-Time -->
-            <div class="relative flex-1 sm:w-40 md:w-48">
-                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                <input type="text" id="search-task-input" placeholder="Cari agenda/tugas..." value="<?= e($searchQuery) ?>" 
-                       class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-700 placeholder-slate-400 focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
-            </div>
+           
 
             <!-- Tombol Bersihkan Selesai (Jika ada tugas selesai) -->
             <?php if (($stats['completed'] ?? 0) > 0): ?>
