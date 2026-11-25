@@ -16,6 +16,10 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// ⏰ [ZONA WAKTU]: Mengatur zona waktu default ke Waktu Indonesia Barat (WIB / GMT+7)
+// Agar fungsi date(), time(), dan strtotime() sesuai dengan jam lokal di Indonesia.
+date_default_timezone_set('Asia/Jakarta');
+
 // ------------------------------------------------------------------------------
 // 1. KONFIGURASI KONEKSI DATABASE (Default Bawaan Laragon)
 // ------------------------------------------------------------------------------
@@ -56,6 +60,9 @@ function getDBConnection() {
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,       // Hasil query berupa array asosiatif
             PDO::ATTR_EMULATE_PREPARES   => false,                  // Prepared statement asli dari MySQL
         ]);
+        
+        // Samakan zona waktu koneksi MySQL ke GMT+7 (WIB)
+        $pdo->exec("SET time_zone = '+07:00'");
         
         // Buat tabel users & tasks otomatis jika belum tersedia
         initDatabaseTables($pdo);
@@ -233,7 +240,7 @@ if (!function_exists('getCurrentUser')) {
 if (!function_exists('requireLogin')) {
     function requireLogin() {
         if (!isLoggedIn()) {
-            setFlash('danger', 'Silakan login terlebih dahulu untuk mengakses aplikasi.');
+            setFlash('danger', 'Silakan login terlebih dahulu untuk mengakses webiste.');
             header("Location: login.php");
             exit;
         }
@@ -387,7 +394,7 @@ if (!function_exists('getDeadlineStatus')) {
         }
 
         // Kategori 3: Jatuh tempo hari ini
-        if ($diffSeconds <= 86400 && date('Y-m-d', $dueTimestamp) === date('Y-m-d')) {
+        if ($dueDate === date('Y-m-d')) {
             return [
                 'type'        => 'today',
                 'label'       => 'Hari Ini',

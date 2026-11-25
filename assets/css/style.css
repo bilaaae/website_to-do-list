@@ -1,70 +1,94 @@
 /* ==============================================================================
    FILE: assets/css/style.css
-   FUNGSI: Styling kustom aplikasi To-Do List Elegan (UKK)
-   - Font Google 'Plus Jakarta Sans'
-   - Efek Glassmorphism (Frosted glass)
-   - Custom Scrollbar
-   - Animasi Drag & Drop (Drag Over Highlight, Card Hover)
+   FUNGSI: Pusat Pengaturan Styling Kustom Aplikasi TaskFlow (UKK)
+   - Font Google (Plus Jakarta Sans / Poppins / Inter)
+   - Palet Warna (Background, Teks, Tombol, Border, Badge)
+   - Efek Glassmorphism & Custom Scrollbar
+   - Animasi Drag & Drop & Modal Pop-Up
    ============================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap');
 
 /* ==============================================================================
-   🎨 PUSAT PENGATURAN WARNA LANGSUNG (SEMUA SUDAH PAKAI KODE ASLI #HEX!)
-   👉 SEMUA KOTAK WARNA DI BAWAH INI SEKARANG BISA LANGSUNG DIKLIK & DIGESER DENGAN MOUSE!
-   👉 TIDAK ADA LAGI TULISAN 'var(...)', SEMUANYA LANGSUNG KODE WARNA ASLI.
+   🎯 PANDUAN KILAT UJIAN UKK (LOMPAT KE BARIS INI JIKA DISURUH PENGUJI GANTI TAMPILAN):
+   ------------------------------------------------------------------------------
+   👉 1.  Ganti Jenis Huruf (Font) : Baris 38  ('Plus Jakarta Sans' / 'Poppins')
+   👉 2.  Ganti Warna Latar (Body) : Baris 46  (#f8fafc)
+   👉 3.  Ganti Warna Teks Utama   : Baris 47  (#334155)
+   👉 4.  Ganti Tombol Utama (Ungu): Baris 58  (#4f46e5) -> Tambah Agenda, Login, Regis
+   👉 5.  Ganti Hover Tombol Utama : Baris 70  (#3730a3)
+   👉 6.  Ganti Warna Teks Link    : Baris 78  (#4f46e5) -> Link biru aktif
+   👉 7.  Ganti Tombol Hapus Modal : Baris 90  (#f43f5e) -> Tombol Hapus Merah
+   👉 8.  Ganti Border Input Form  : Baris 114 (#4f46e5) -> Border saat fokus ketik
+   👉 9.  Ganti Menu Sidebar Kiri  : Baris 135 (Teks/Ikon/Titik Menu Aktif di Kiri)
+   👉 10. Ganti Warna Ikon Edit    : Baris 148 (#64748b) -> Ikon Pensil di Kartu Tugas
+   👉 11. Ganti Warna Ikon Hapus   : Baris 156 (#94a3b8) -> Ikon Sampah di Kartu Tugas
+   👉 12. Ganti Warna Kartu Tugas  : Baris 173 (#ffffff latar, #e2e8f0 border)
+   👉 13. Ganti Prioritas Tinggi   : Baris 187 (#be123c teks, #fff1f2 latar)
+   👉 14. Ganti Prioritas Sedang   : Baris 194 (#b45309 teks, #fffbeb latar)
+   👉 15. Ganti Prioritas Rendah   : Baris 201 (#047857 teks, #ecfdf5 latar)
+   👉 16. Ganti Kartu Statistik   : Baris 217 (Total, Belum Mulai, Dalam Proses, Selesai)
+   👉 17. Ganti Mode Toolbar Kanan : Baris 270 (Tombol Aktif Kanban/List/Kalender)
+   👉 18. Ganti Hover Sampah Toolbar: Baris 296 (Tombol Bersihkan Selesai)
+   👉 19. Ganti Warna Sorot Drop   : Baris 322 (#30eefc) -> Warna sorot saat kartu digeser
+   👉 20. Ganti Halaman Sambutan   : Baris 387 (Kartu Sambutan, Badge, Tombol Lanjut)
+   👉 21. GANTI WARNA MODE GELAP   : Baris 420 (Latar Gelap, Kartu, Teks, Border, Modal)
    ============================================================================== */
 
-/* 🔤 PENGATURAN FONT WEBSITE (Ganti nama font jika diminta: 'Plus Jakarta Sans', 'Poppins', 'Inter', 'Roboto') */
+/* ------------------------------------------------------------------------------
+   1. PENGATURAN JENIS FONT
+   ------------------------------------------------------------------------------ */
 body, button, input, select, textarea {
     font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
-/* 🎨 WARNA BACKGROUND & TEKS HALAMAN */
+/* ------------------------------------------------------------------------------
+   2. WARNA BACKGROUND & TEKS HALAMAN
+   ------------------------------------------------------------------------------ */
 body {
     background-color: #f8fafc !important; /* ⬅️ KLIK KOTAK WARNA INI UNTUK GANTI WARNA LATAR! */
     color: #334155 !important;            /* ⬅️ KLIK KOTAK WARNA INI UNTUK GANTI WARNA TEKS! */
 }
 
 /* ------------------------------------------------------------------------------
-   1. TOMBOL UTAMA (Tombol Tambah Agenda, Daftar Akun Regis, Tombol Masuk Login, Simpan)
+   3. TOMBOL UTAMA (Tambah Agenda, Daftar Regis, Masuk Login, Simpan)
    ------------------------------------------------------------------------------ */
 .btn-primary, 
 .btn-open-add-modal, 
 button[type="submit"].bg-brand-600, 
 button[type="submit"],
 .bg-brand-600 {
-    background-color: #4f46e5 !important; /* ⬅️ KLIK KOTAK WARNA INI UNTUK GANTI WARNA TOMBOL UTAMA! */
+    background-color: #4f46e5 !important; /* ⬅️ KLIK KOTAK WARNA INI UNTUK TOMBOL UTAMA! */
     border-color: #4f46e5 !important;
     color: #ffffff !important;
 }
 
-/* WARNA TOMBOL SAAT KURSOR MENEMPEL (HOVER) */
+/* WARNA HOVER TOMBOL UTAMA (SAAT DISOROT KURSOR) */
 .btn-primary:hover, 
 .btn-open-add-modal:hover, 
 button[type="submit"].bg-brand-600:hover, 
 button[type="submit"]:hover,
 .hover\:bg-brand-700:hover, 
 .bg-brand-700 {
-    background-color: #3730a3 !important; /* ⬅️ KLIK KOTAK WARNA INI UNTUK WARNA HOVER TOMBOL! */
+    background-color: #3730a3 !important; /* ⬅️ KLIK KOTAK WARNA INI UNTUK HOVER TOMBOL UTAMA! */
     border-color: #3730a3 !important;
 }
 
 /* ------------------------------------------------------------------------------
-   2. WARNA TEKS LINK BIRU / LINK AKTIF (Contoh: Link "Masuk di sini" di Regis)
+   4. WARNA LINK BIRU / TEKS BRAND
    ------------------------------------------------------------------------------ */
 .text-brand-600, .text-brand-700 {
     color: #4f46e5 !important;            /* ⬅️ KLIK KOTAK WARNA INI UNTUK GANTI WARNA LINK! */
 }
 
 /* ------------------------------------------------------------------------------
-   3. WARNA MERAH / ROSE (Tanda Bintang Regis *, Tombol Logout, dan Tombol Hapus)
+   5. WARNA MERAH / ROSE (Tanda Bintang *, Tombol Hapus & Logout)
    ------------------------------------------------------------------------------ */
 .text-rose-500, .text-rose-600 {
-    color: #f43f5e !important;            /* ⬅️ KLIK KOTAK WARNA INI UNTUK GANTI BINTANG MERAH REGIS! */
+    color: #f43f5e !important;            /* ⬅️ KLIK KOTAK WARNA INI UNTUK BINTANG MERAH REGIS! */
 }
 
-/* TOMBOL HAPUS TUGAS (DI DALAM MODAL KONFIRMASI HAPUS) */
+/* TOMBOL HAPUS TUGAS (DI DALAM MODAL KONFIRMASI) */
 .bg-rose-600 {
     background-color: #f43f5e !important; /* ⬅️ KLIK KOTAK WARNA INI UNTUK TOMBOL HAPUS TUGAS! */
     border-color: #f43f5e !important;
@@ -75,21 +99,19 @@ button[type="submit"]:hover,
     border-color: #e11d48 !important;
 }
 
-/* EFEK HOVER TOMBOL LOGOUT & HAPUS (SAAT DISOROT KURSOR) */
+/* EFEK HOVER LOGOUT */
 .hover\:text-rose-600:hover {
-    color: #e11d48 !important;            /* ⬅️ KLIK KOTAK WARNA INI UNTUK WARNA TEKS HOVER LOGOUT! */
+    color: #e11d48 !important;
 }
-
 .hover\:bg-rose-50:hover {
-    background-color: #fff1f2 !important; /* ⬅️ KLIK KOTAK WARNA INI UNTUK BACKGROUND HOVER LOGOUT! */
+    background-color: #fff1f2 !important;
 }
-
 .hover\:border-rose-200:hover {
-    border-color: #fecdd3 !important;     /* ⬅️ KLIK KOTAK WARNA INI UNTUK BORDER HOVER LOGOUT! */
+    border-color: #fecdd3 !important;
 }
 
 /* ------------------------------------------------------------------------------
-   4. BORDER & FOKUS KOTAK INPUT FORMULIR (Regis & Login)
+   6. BORDER & FOKUS KOTAK INPUT FORMULIR (Regis, Login, Modal)
    ------------------------------------------------------------------------------ */
 .border-brand-500, .border-brand-600 {
     border-color: #4f46e5 !important;     /* ⬅️ KLIK KOTAK WARNA INI UNTUK BORDER INPUT! */
@@ -100,17 +122,190 @@ button[type="submit"]:hover,
 }
 
 /* ------------------------------------------------------------------------------
-   5. BADGE MENU AKTIF
+   7. MENU TAMPILAN AKTIF DI SIDEBAR KIRI (Kanban / List / Kalender)
    ------------------------------------------------------------------------------ */
-.bg-brand-50 {
-    background-color: #eef2ff !important; /* ⬅️ KLIK KOTAK WARNA INI UNTUK BADGE MENU AKTIF! */
+/* 🔲 Kotak Latar & Border Menu Aktif Sidebar */
+.sidebar-mode-active, .bg-brand-50 {
+    background-color: #eef2ff !important; /* ⬅️ KLIK UNTUK GANTI LATAR MENU AKTIF SIDEBAR */
+    border-color: #c7d2fe !important;     /* ⬅️ KLIK UNTUK GANTI BORDER MENU AKTIF SIDEBAR */
 }
 
-.border-brand-200 {
-    border-color: #c7d2fe !important;
+/* 🏷️ Teks & Ikon Menu Aktif Sidebar */
+.sidebar-mode-active, 
+.sidebar-mode-icon,
+.sidebar-mode-active span,
+.sidebar-mode-active i {
+    color: #4f46e5 !important;            /* ⬅️ KLIK UNTUK GANTI TEKS & IKON MENU AKTIF SIDEBAR */
 }
 
-/* Efek Glassmorphism Transparan Halus */
+/* 🔵 Titik Indikator Menu Aktif Sidebar */
+.sidebar-mode-dot {
+    background-color: #4f46e5 !important; /* ⬅️ KLIK UNTUK GANTI TITIK MENU AKTIF SIDEBAR */
+}
+
+/* ------------------------------------------------------------------------------
+   8. TOMBOL IKON EDIT & HAPUS PADA KARTU TUGAS
+   ------------------------------------------------------------------------------ */
+/* ✏️ Ikon Edit (Pensil) */
+.btn-open-edit {
+    color: #64748b !important;            /* ⬅️ KLIK KOTAK WARNA INI UNTUK IKON EDIT! */
+}
+.btn-open-edit:hover {
+    color: #4f46e5 !important;            /* ⬅️ KLIK KOTAK WARNA INI UNTUK HOVER EDIT! */
+}
+
+/* 🗑️ Ikon Hapus (Tempat Sampah) */
+.btn-open-delete {
+    color: #94a3b8 !important;            /* ⬅️ KLIK KOTAK WARNA INI UNTUK IKON HAPUS! */
+}
+.btn-open-delete:hover {
+    color: #ef4f71 !important;            /* ⬅️ KLIK KOTAK WARNA INI UNTUK HOVER HAPUS! */
+}
+
+/* Kejelasan ikon kartu tanpa harus di-hover */
+.task-card .opacity-40 {
+    opacity: 0.8 !important;
+}
+.task-card:hover .opacity-40 {
+    opacity: 1 !important;
+}
+
+/* ------------------------------------------------------------------------------
+   9. KARTU TUGAS (TASK CARD) & CONTAINER
+   ------------------------------------------------------------------------------ */
+.task-card, .task-card-item {
+    background-color: #ffffff !important; /* ⬅️ KLIK KOTAK WARNA INI UNTUK WARNA KARTU TUGAS! */
+    border-color: #e2e8f0 !important;     /* ⬅️ KLIK KOTAK WARNA INI UNTUK BORDER KARTU TUGAS! */
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+.task-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05), 0 6px 8px -6px rgba(0, 0, 0, 0.04);
+}
+
+/* ------------------------------------------------------------------------------
+   10. BADGE PRIORITAS TUGAS (TINGGI, SEDANG, RENDAH)
+   ------------------------------------------------------------------------------ */
+/* 🔴 Prioritas Tinggi */
+.bg-rose-50.text-rose-700, .border-rose-200 {
+    color: #be123c !important;            /* ⬅️ TEKS MERAH PRIORITAS TINGGI */
+    background-color: #fff1f2 !important; /* ⬅️ LATAR MERAH PRIORITAS TINGGI */
+    border-color: #fecdd3 !important;
+}
+
+/* 🟡 Prioritas Sedang */
+.bg-amber-50.text-amber-700, .border-amber-200 {
+    color: #b45309 !important;            /* ⬅️ TEKS KUNING PRIORITAS SEDANG */
+    background-color: #fffbeb !important; /* ⬅️ LATAR KUNING PRIORITAS SEDANG */
+    border-color: #fde68a !important;
+}
+
+/* 🟢 Prioritas Rendah */
+.bg-emerald-50.text-emerald-700, .border-emerald-200 {
+    color: #047857 !important;            /* ⬅️ TEKS HIJAU PRIORITAS RENDAH */
+    background-color: #ecfdf5 !important; /* ⬅️ LATAR HIJAU PRIORITAS RENDAH */
+    border-color: #a7f3d0 !important;
+}
+
+.priority-high-pulse {
+    animation: softPulse 1.8s infinite ease-in-out;
+}
+@keyframes softPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+}
+
+/* ------------------------------------------------------------------------------
+   11. KARTU STATISTIK KHUSUS (TOTAL, BELUM MULAI, DALAM PROSES, SELESAI)
+   ------------------------------------------------------------------------------ */
+/* 🟣 Card 1: Total Tugas (HANYA KARTU INI, TIDAK MENGUBAH MENU/TOMBOL LAIN) */
+.stat-card-total .stat-number,
+.stat-card-total .stat-icon-box {
+    color: #4f46e5 !important;            /* ⬅️ KLIK UNTUK GANTI WARNA ANGKA TOTAL TUGAS */
+}
+.stat-card-total .stat-icon-box {
+    background-color: #eef2ff !important; /* ⬅️ KLIK UNTUK GANTI KOTAK IKON TOTAL TUGAS */
+}
+
+/* 🔴 Card 2: Belum Mulai (HANYA KARTU INI) */
+.stat-card-todo .stat-number,
+.stat-card-todo .stat-icon-box {
+    color: #f43f5e !important;            /* ⬅️ KLIK UNTUK GANTI WARNA ANGKA BELUM MULAI */
+}
+.stat-card-todo .stat-icon-box {
+    background-color: #fff1f2 !important; /* ⬅️ KLIK UNTUK GANTI KOTAK IKON BELUM MULAI */
+}
+
+/* 🟡 Card 3: Dalam Proses (HANYA KARTU INI) */
+.stat-card-progress .stat-number,
+.stat-card-progress .stat-icon-box {
+    color: #d97706 !important;            /* ⬅️ KLIK UNTUK GANTI WARNA ANGKA DALAM PROSES */
+}
+.stat-card-progress .stat-icon-box {
+    background-color: #fffbeb !important; /* ⬅️ KLIK UNTUK GANTI KOTAK IKON DALAM PROSES */
+}
+
+/* 🟢 Card 4: Selesai (HANYA KARTU INI) */
+.stat-card-completed .stat-number,
+.stat-card-completed .stat-percent,
+.stat-card-completed .stat-icon-box {
+    color: #059669 !important;            /* ⬅️ KLIK UNTUK GANTI WARNA ANGKA SELESAI */
+}
+.stat-card-completed .stat-icon-box {
+    background-color: #ecfdf5 !important; /* ⬅️ KLIK UNTUK GANTI KOTAK IKON SELESAI */
+}
+.stat-card-completed .stat-bar {
+    background-color: #10b981 !important; /* ⬅️ KLIK UNTUK GANTI WARNA PROGRESS BAR */
+}
+
+/* ------------------------------------------------------------------------------
+   12. TOOLBAR (BILAH KONTROL, TOMBOL MODE, PENCARIAN & FILTER)
+   ------------------------------------------------------------------------------ */
+/* 🔲 Kotak Latar Toolbar */
+.toolbar-container {
+    background-color: #ffffff !important; /* ⬅️ KLIK UNTUK GANTI WARNA LATAR TOOLBAR */
+    border-color: #e2e8f0 !important;     /* ⬅️ KLIK UNTUK GANTI BORDER TOOLBAR */
+}
+
+/* 🔘 Tombol Mode Aktif (Kanban / List / Kalender) */
+.toolbar-mode-active {
+    background-color: #ffffff !important; /* ⬅️ KLIK WARNA LATAR TOMBOL MODE AKTIF */
+    color: #3c10b3 !important;            /* ⬅️ KLIK WARNA TEKS/IKON TOMBOL MODE AKTIF */
+}
+
+/* 🔍 Kotak Input Pencarian */
+.toolbar-search-input {
+    background-color: #f8fafc !important; /* ⬅️ KLIK WARNA LATAR KOTAK PENCARIAN */
+    border-color: #e2e8f0 !important;     /* ⬅️ KLIK WARNA BORDER KOTAK PENCARIAN */
+    color: #334155 !important;            /* ⬅️ KLIK WARNA TEKS KOTAK PENCARIAN */
+}
+
+/* 🔽 Dropdown Filter (Urutkan, Kategori, Prioritas) */
+.toolbar-filter-select {
+    background-color: #f8fafc !important; /* ⬅️ KLIK WARNA LATAR DROPDOWN FILTER */
+    border-color: #e2e8f0 !important;     /* ⬅️ KLIK WARNA BORDER DROPDOWN FILTER */
+    color: #334155 !important;            /* ⬅️ KLIK WARNA TEKS DROPDOWN FILTER */
+}
+
+/* 🗑️ Tombol Bersihkan Tugas Selesai (Ikon Sampah di Toolbar) */
+.btn-clear-completed,
+button.btn-clear-completed {
+    background-color: #4f46e5 !important; /* ⬅️ KLIK GANTI WARNA LATAR TOMBOL SAMPAH TOOLBAR */
+    border-color: #4f46e5 !important;
+    color: #ffffff !important;            /* ⬅️ KLIK GANTI WARNA IKON SAMPAH TOOLBAR */
+}
+
+/* 🗑️ WARNA HOVER TOMBOL SAMPAH TOOLBAR (SAAT DISOROT KURSOR) */
+.btn-clear-completed:hover,
+button.btn-clear-completed:hover {
+    background-color: #e11d48 !important; /* ⬅️ KLIK GANTI WARNA HOVER TOMBOL SAMPAH TOOLBAR (Bukan Putih Lagi!) */
+    border-color: #e11d48 !important;
+    color: #ffffff !important;
+}
+
+/* ------------------------------------------------------------------------------
+   13. EFEK GLASSMORPHISM (NAVBAR & PANEL)
+   ------------------------------------------------------------------------------ */
 .glass-panel {
     background: rgba(255, 255, 255, 0.88);
     backdrop-filter: blur(12px);
@@ -119,13 +314,29 @@ button[type="submit"]:hover,
 }
 
 .glass-nav {
-    background: rgba(255, 255, 255, 0.82);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid rgba(226, 232, 240, 0.7);
 }
 
-/* Custom Scrollbar Minimalis */
+/* ------------------------------------------------------------------------------
+   13. DRAG AND DROP KANBAN HIGHLIGHT
+   ------------------------------------------------------------------------------ */
+.kanban-drop-zone.drag-over-active {
+    background-color: rgba(48, 238, 252, 0.5) !important; /* ⬅️ WARNA HIGHLIGHT SAAT KARTU DIGESER */
+    border: 2px dashed #6366f1 !important;
+    border-radius: 0.875rem;
+}
+
+.task-card[draggable="true"] {
+    user-select: none;
+    -webkit-user-drag: element;
+}
+
+/* ------------------------------------------------------------------------------
+   14. CUSTOM SCROLLBAR & CHECKBOX
+   ------------------------------------------------------------------------------ */
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -141,7 +352,6 @@ button[type="submit"]:hover,
     background: #94a3b8;
 }
 
-/* Checkbox Interaktif */
 .custom-checkbox {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -149,54 +359,16 @@ button[type="submit"]:hover,
     transform: scale(1.1);
 }
 
-/* Kartu Tugas (Task Card) */
-.task-card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
-}
-.task-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05), 0 6px 8px -6px rgba(0, 0, 0, 0.04);
-}
-
-/* Animasi Denyut Indikator Prioritas Tinggi */
-@keyframes softPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.35; }
-}
-.priority-high-pulse {
-    animation: softPulse 1.8s infinite ease-in-out;
-}
-
-/* --------------------------------------------------------------------------
-   STYLING KHUSUS DRAG AND DROP
-   -------------------------------------------------------------------------- */
-/* Efek saat kolom menjadi target yang aktif di atasnya kartu */
-.kanban-drop-zone.drag-over-active {
-    background-color: rgba(224, 231, 255, 0.5) !important;
-    border: 2px dashed #6366f1 !important;
-    border-radius: 0.875rem;
-}
-
-/* Kursor saat kartu disentuh/diseret */
-.task-card[draggable="true"] {
-    user-select: none;
-    -webkit-user-drag: element;
-}
-
-/* --------------------------------------------------------------------------
-   STYLING KHUSUS KALENDER AGENDA REAL-TIME
-   -------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+   15. KALENDER & MODAL POP-UP ANIMASI
+   ------------------------------------------------------------------------------ */
 .calendar-cell {
     transition: background-color 0.15s ease, border-color 0.15s ease;
 }
-
 .calendar-cell:hover .btn-add-agenda-date {
     opacity: 1;
 }
 
-/* --------------------------------------------------------------------------
-   STYLING ANIMASI MODAL POP-UP
-   -------------------------------------------------------------------------- */
 .modal-backdrop {
     transition: opacity 0.25s ease-out;
 }
@@ -211,3 +383,338 @@ button[type="submit"]:hover,
     transform: scale(0.95) translateY(12px);
     opacity: 0;
 }
+
+/* ------------------------------------------------------------------------------
+   16. HALAMAN SAMBUTAN (WELCOME PAGE / ONBOARDING)
+   ------------------------------------------------------------------------------ */
+/* 🔲 Kartu Sambutan Utama */
+
+
+
+/*.welcome-card p {
+    text-align: justify !important; /* membuat semua paragraf kartu sambutan rata kiri-kanan 
+}*/
+
+
+.welcome-card {
+    background-color: rgba(255, 255, 255, 0.95) !important; /* ⬅️ KLIK UNTUK GANTI WARNA LATAR KARTU SAMBUTAN */
+    border-color: #e2e8f0 !important;                        /* ⬅️ KLIK UNTUK GANTI BORDER KARTU SAMBUTAN */
+}
+
+/* 🏷️ Badge 'Akun Berhasil Dibuat' */
+.welcome-badge {
+    background-color: #eef2ff !important; /* ⬅️ KLIK UNTUK GANTI LATAR BADGE */
+    color: #4f46e5 !important;            /* ⬅️ KLIK UNTUK GANTI TEKS BADGE */
+    border-color: #c7d2fe !important;
+}
+
+/* 🔘 Tombol 'Lanjut ke Halaman Utama' */
+.btn-welcome-next {
+    background-color: #4f46e5 !important; /* ⬅️ KLIK UNTUK GANTI WARNA TOMBOL LANJUT */
+    color: #ffffff !important;
+}
+.btn-welcome-next:hover {
+    background-color: #3730a3 !important; /* ⬅️ KLIK UNTUK GANTI WARNA HOVER TOMBOL LANJUT */
+}
+
+/* ==============================================================================
+   17. PENGATURAN MODE GELAP (DARK MODE - KELAS .dark-mode)
+   ==============================================================================
+   💡 PANDUAN CEPAT UJIAN UKK:
+   Jika penguji meminta ubah warna tema gelap, cukup ganti kode warna di bawah ini:
+   - Warna Background Gelap : #0f172a (Solid Slate Gelap Bersih)
+   - Warna Kartu Gelap      : #1e293b (Solid Slate 800)
+   - Warna Border Gelap     : #334155 (Slate 700)
+   - Warna Teks Putih Terang: #f8fafc (Putih Bersih Kontras)
+   - Warna Teks Redup/Info  : #94a3b8 (Abu-abu Terang)
+   ============================================================================== */
+
+/* 🌌 1. Latar Belakang Seluruh Halaman (Body & HTML) */
+html.dark-mode,
+body.dark-mode,
+html.dark body {
+    background-color: #0f172a !important; /* ⬅️ KLIK UNTUK GANTI WARNA LATAR MODE GELAP */
+    background-image: none !important;    /* Menghapus gradien terang bawaan Tailwind */
+    color: #f8fafc !important;            /* ⬅️ KLIK UNTUK GANTI WARNA TEKS MODE GELAP */
+}
+
+/* 🏷️ 2. Logo & Teks Gradien (Dibuat Putih Terang agar Terbaca Jelas) */
+.dark-mode .bg-clip-text {
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    background-clip: unset !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+/* 🔲 3. Semua Kotak & Kartu Putih Berubah Menjadi Solid Dark Card */
+.dark-mode .bg-white,
+.dark-mode .bg-white\/90,
+.dark-mode .bg-white\/95 {
+    background-color: #1e293b !important; /* ⬅️ KLIK UNTUK GANTI WARNA KARTU GELAP */
+    border-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+/* 🧭 4. Navigasi Atas (Navbar) */
+.dark-mode .glass-nav {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+.dark-mode .glass-nav span.bg-slate-100\/90,
+.dark-mode .glass-nav .border-slate-200 {
+    background-color: #0f172a !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+.dark-mode .glass-nav strong,
+.dark-mode .glass-nav p {
+    color: #f8fafc !important;
+}
+
+/* 📋 5. Menu Navigasi Samping (Sidebar) */
+.dark-mode aside {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+.dark-mode aside p {
+    color: #94a3b8 !important;
+}
+.dark-mode aside a {
+    color: #cbd5e1 !important;
+}
+.dark-mode aside a:hover {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+.dark-mode aside a.bg-slate-100 {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+.dark-mode aside a.bg-slate-100 span {
+    color: #ffffff !important;
+}
+.dark-mode .sidebar-mode-active {
+    background-color: rgba(79, 70, 229, 0.25) !important;
+    color: #818cf8 !important;
+    border-color: rgba(99, 102, 241, 0.4) !important;
+}
+.dark-mode .sidebar-mode-active .sidebar-mode-icon,
+.dark-mode .sidebar-mode-active .sidebar-mode-dot {
+    color: #818cf8 !important;
+    background-color: #818cf8 !important;
+}
+.dark-mode aside .bg-slate-100 {
+    background-color: #0f172a !important;
+}
+
+/* 📊 6. Kartu Statistik */
+.dark-mode .stat-card-total,
+.dark-mode .stat-card-todo,
+.dark-mode .stat-card-progress,
+.dark-mode .stat-card-done,
+.dark-mode .stat-card-item {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+.dark-mode .stat-label {
+    color: #94a3b8 !important;
+}
+
+/* 🎛️ 7. Toolbar (Pilihan Mode, Pencarian, & Filter Dropdown) */
+.dark-mode .toolbar-container {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+.dark-mode .toolbar-mode-wrapper {
+    background-color: #0f172a !important;
+    border-color: #334155 !important;
+}
+.dark-mode .toolbar-mode-btn {
+    color: #cbd5e1 !important;
+}
+.dark-mode .toolbar-mode-btn.toolbar-mode-active {
+    background-color: #334155 !important;
+    color: #818cf8 !important;
+}
+.dark-mode .toolbar-search-input,
+.dark-mode .toolbar-filter-select,
+.dark-mode #search-task-input,
+.dark-mode select {
+    background-color: #0f172a !important;
+    color: #ffffff !important;
+    border-color: #334155 !important;
+}
+.dark-mode .toolbar-search-input::placeholder,
+.dark-mode #search-task-input::placeholder {
+    color: #64748b !important;
+}
+
+/* 📅 8. KALENDER AGENDA (view_calendar.php) */
+.dark-mode div.bg-white.rounded-2xl {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+.dark-mode .bg-slate-50\/50,
+.dark-mode div.bg-slate-50 {
+    background-color: #0f172a !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+.dark-mode div.bg-white.grid {
+    background-color: #1e293b !important;
+}
+.dark-mode .divide-slate-100 > * {
+    border-color: #334155 !important;
+}
+.dark-mode div.bg-slate-50\/40 {
+    background-color: rgba(15, 23, 42, 0.6) !important;
+    color: #475569 !important;
+}
+.dark-mode div.min-h-\[110px\] {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f8fafc !important;
+}
+.dark-mode div.min-h-\[110px\]:hover {
+    background-color: #273549 !important;
+}
+.dark-mode div.min-h-\[110px\] span {
+    color: #f8fafc !important;
+}
+.dark-mode .btn-open-edit.truncate {
+    background-color: #0f172a !important;
+    border-color: #334155 !important;
+    color: #f8fafc !important;
+}
+.dark-mode a.rounded-xl.border {
+    background-color: #0f172a !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+.dark-mode a.rounded-xl.border:hover {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+.dark-mode h2.text-slate-800 {
+    color: #ffffff !important;
+}
+
+/* 🗂️ 9. Kolom Papan Kanban */
+.dark-mode .bg-slate-100\/70 {
+    background-color: rgba(30, 41, 59, 0.45) !important;
+    border-color: #334155 !important;
+}
+.dark-mode .kanban-drop-zone {
+    background-color: transparent !important;
+}
+.dark-mode .empty-column-placeholder {
+    border-color: #334155 !important;
+    color: #64748b !important;
+}
+
+/* 🃏 10. Kartu Tugas (Task Card Kanban & List) */
+.dark-mode .task-card-item {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4) !important;
+}
+.dark-mode .task-card-item h4 {
+    color: #ffffff !important;
+}
+.dark-mode .task-card-item p {
+    color: #94a3b8 !important;
+}
+.dark-mode .task-card-item .bg-slate-100 {
+    background-color: #0f172a !important;
+    color: #cbd5e1 !important;
+    border-color: #334155 !important;
+}
+
+/* 🪟 11. Pop-Up Modal (Tambah, Edit, Hapus) */
+.dark-mode .modal-content {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f8fafc !important;
+}
+.dark-mode .modal-content .border-b,
+.dark-mode .modal-content .bg-slate-50\/50 {
+    background-color: #0f172a !important;
+    border-color: #334155 !important;
+}
+.dark-mode .modal-content label {
+    color: #cbd5e1 !important;
+}
+.dark-mode .modal-content input,
+.dark-mode .modal-content select,
+.dark-mode .modal-content textarea {
+    background-color: #0f172a !important;
+    color: #ffffff !important;
+    border-color: #334155 !important;
+}
+
+/* 🔔 12. Tombol Tema & Dropdown Lonceng Notifikasi */
+.dark-mode #notif-dropdown {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f8fafc !important;
+}
+.dark-mode #notif-dropdown .bg-slate-50\/70 {
+    background-color: #0f172a !important;
+    border-color: #334155 !important;
+}
+.dark-mode #btn-toggle-notif,
+.dark-mode #btn-theme-toggle,
+.dark-mode .btn-theme-toggle {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+/* 🚪 13. Halaman Login, Register, & Welcome */
+.dark-mode div.bg-white\/90.backdrop-blur-md,
+.dark-mode div.welcome-card {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;
+    color: #f8fafc !important;
+}
+.dark-mode div.bg-white\/90 input {
+    background-color: #0f172a !important;
+    color: #ffffff !important;
+    border-color: #334155 !important;
+}
+.dark-mode div.bg-white\/90 label {
+    color: #cbd5e1 !important;
+}
+.dark-mode .welcome-card .p-4 {
+    background-color: #0f172a !important;
+    border-color: #334155 !important;
+}
+.dark-mode .welcome-card h3 {
+    color: #ffffff !important;
+}
+
+/* 🏷️ 14. Footer & Teks Umum */
+.dark-mode footer {
+    border-color: #334155 !important;
+}
+.dark-mode footer p {
+    color: #94a3b8 !important;
+}
+.dark-mode .text-slate-900,
+.dark-mode .text-slate-800,
+.dark-mode .text-slate-700 {
+    color: #f8fafc !important;
+}
+.dark-mode .text-slate-600,
+.dark-mode .text-slate-500,
+.dark-mode .text-slate-400 {
+    color: #94a3b8 !important;
+}
+.dark-mode .border-slate-200,
+.dark-mode .border-slate-100 {
+    border-color: #334155 !important;
+}
+
+

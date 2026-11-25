@@ -52,34 +52,47 @@ $username = htmlspecialchars($currentUser['username'] ?? 'user');
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css?v=<?= time() ?>">
+
+    <!-- Script Pengatur Mode Gelap (Dark Mode) -->
+    <script src="assets/js/theme.js?v=<?= time() ?>"></script>
 </head>
 <body class="bg-gradient-to-br from-slate-50 via-indigo-50/40 to-slate-100 min-h-screen flex flex-col justify-center items-center p-4 antialiased selection:bg-brand-500 selection:text-white py-12">
+
+    <!-- Tombol Beralih Mode Gelap/Terang -->
+    <div class="fixed top-5 right-5 z-50">
+        <button type="button" class="btn-theme-toggle w-10 h-10 rounded-2xl border border-slate-200 bg-white/90 backdrop-blur-md shadow-md hover:bg-slate-50 flex items-center justify-center text-sm transition" title="Beralih Mode Gelap/Terang">
+            <i class="fa-solid fa-moon text-slate-600"></i>
+        </button>
+    </div>
 
     <div class="w-full max-w-2xl">
 
         <!-- KARTU SAMBUTAN UTAMA -->
-        <div class="bg-white/95 backdrop-blur-md rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-200/50 p-8 sm:p-12 text-center">
+        <div class="welcome-card bg-white/95 backdrop-blur-md rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-200/50 p-8 sm:p-12 text-center">
             
             <!-- Logo Emblem Sambutan -->
             <img src="assets/img/logo.jpg" alt="Logo TaskFlow" class="w-20 h-20 rounded-3xl object-contain p-2 bg-white shadow-xl shadow-brand-500/20 border border-slate-200 mx-auto mb-6 transform hover:scale-105 transition duration-300">
 
             <!-- Teks Sambutan -->
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-brand-50 text-brand-700 border border-brand-200/70 mb-3">
+            <span class="welcome-badge inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-brand-50 text-brand-700 border border-brand-200/70 mb-3">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>
                 Akun Berhasil Dibuat
             </span>
 
-            <h1 class="text-2xl sm:text-3xl font-black bg-gradient-to-r from-slate-900 via-indigo-950 to-brand-700 bg-clip-text text-transparent">
-                Selamat Datang, <?= $name ?>! 🎉
+            <h1 class="text-2xl sm:text-3xl font-black">
+                <span class="bg-gradient-to-r from-slate-900 via-indigo-950 to-brand-700 bg-clip-text text-transparent">Selamat Datang, <?= $name ?>!</span>
+                <span class="inline-block transform hover:rotate-12 hover:scale-125 transition duration-300 cursor-default">🎉</span>
             </h1>
-
+            
+            <!-- jika mau diubah jadi justify tambahkan kode ini : text-justify, di belakang tanda petik awal -->
             <p class="text-sm sm:text-base text-slate-600 mt-2 max-w-lg mx-auto leading-relaxed">
                 Akun Anda (<strong class="text-slate-800">@<?= $username ?></strong>) telah aktif. Ruang kerja Anda masih bersih dan siap diisi dengan agenda kegiatan harian Anda.
             </p>
 
             <!-- 3 KARTU FITUR UNGGULAN -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 my-8 text-left">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 my-8 text-left"> 
+                <!-- jika mau diubah jadi justify tambahkan kode text-left diubah jadi : text-justify -->
                 
                 <!-- Fitur 1 -->
                 <div class="p-4 rounded-2xl border border-slate-100 bg-slate-50/70 hover:bg-slate-50 hover:border-brand-200 transition duration-200">
@@ -119,7 +132,7 @@ $username = htmlspecialchars($currentUser['username'] ?? 'user');
             <!-- TOMBOL NEXT / KE HALAMAN UTAMA -->
             <div class="space-y-3">
                 <a href="index.php" 
-                   class="inline-flex items-center justify-center space-x-2 bg-brand-600 hover:bg-brand-700 active:scale-[0.99] text-white font-bold text-sm sm:text-base px-8 py-3.5 rounded-xl shadow-lg shadow-brand-500/25 transition-all duration-200 w-full sm:w-auto">
+                   class="btn-welcome-next inline-flex items-center justify-center space-x-2 bg-brand-600 hover:bg-brand-700 active:scale-[0.99] text-white font-bold text-sm sm:text-base px-8 py-3.5 rounded-xl shadow-lg shadow-brand-500/25 transition-all duration-200 w-full sm:w-auto">
                     <span>Lanjut ke Halaman Utama</span>
                     <i class="fa-solid fa-arrow-right text-xs"></i>
                 </a>

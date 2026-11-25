@@ -49,7 +49,23 @@ $currentUser = $currentUser ?? getCurrentUser();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Custom CSS (Pusat Pengaturan Warna, Font, Animasi, dan Scrollbar) -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css?v=<?= time() ?>">
+
+    <!-- Script Pengatur Mode Gelap (Dark Mode) -->
+    <script src="assets/js/theme.js?v=<?= time() ?>"></script>
+
+    <!-- Data Tugas Mepet untuk Alarm Real-Time di Sisi Browser (JavaScript) -->
+    <script>
+        window.TASKFLOW_URGENT = <?= json_encode(array_values(array_map(function($t) {
+            return [
+                'id'       => (int)($t['id'] ?? 0),
+                'title'    => (string)($t['title'] ?? ''),
+                'due_date' => (string)($t['due_date'] ?? ''),
+                'due_time' => !empty($t['due_time']) ? substr($t['due_time'], 0, 5) : null,
+                'status'   => (string)($t['status'] ?? 'todo')
+            ];
+        }, $urgentTasks ?? []))) ?>;
+    </script>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800 antialiased pb-20">
 
@@ -72,9 +88,16 @@ $currentUser = $currentUser ?? getCurrentUser();
                     </div>
                 </div>
 
-                <!-- Bagian Kanan: Lonceng Notifikasi, Tanggal Real-Time, Tombol Tambah, & Profil Akun -->
+                <!-- Bagian Kanan: Mode Gelap/Terang, Lonceng Notifikasi, Tanggal Real-Time, Tombol Tambah, & Profil Akun -->
                 <div class="flex items-center space-x-2 sm:space-x-3">
                     
+                    <!-- TOMBOL TOGGLE MODE GELAP / TERANG (DARK MODE) -->
+                    <button type="button" id="btn-theme-toggle" 
+                            class="btn-theme-toggle w-9 h-9 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 flex items-center justify-center text-sm transition shadow-sm"
+                            title="Beralih Mode Gelap / Terang">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+
                     <!-- LONCENG NOTIFIKASI DEADLINE MEPET -->
                     <div class="relative">
                         <button type="button" id="btn-toggle-notif" 

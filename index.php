@@ -34,7 +34,7 @@ $stats = [
     'completed'   => 0,
     'percent'     => 0
 ];
-$categories = ['Umum', 'Pekerjaan', 'Pribadi', 'Belajar', 'Keuangan', 'Kesehatan', 'Organisasi', 'UKK & LSP'];
+$categories = ['Umum', 'Pekerjaan', 'Pribadi', 'Belajar', 'Keuangan', 'Kesehatan', 'Organisasi', 'Magang PKL'];
 
 // 🎯 [MENANGKAP PARAMETER URL / QUERY STRING]:
 // Digunakan untuk navigasi mode, pagination bulan kalender, filter kategori, prioritas, sorting, dan live search

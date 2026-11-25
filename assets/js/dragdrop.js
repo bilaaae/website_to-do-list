@@ -106,6 +106,19 @@ document.addEventListener('DOMContentLoaded', () => {
             // Perbarui atribut status pada elemen kartu
             draggedCard.setAttribute('data-status', targetStatus);
 
+            // 🎯 JIKA TUGAS DI-DROP KE KOLOM SELESAI (COMPLETED):
+            // Otomatis hilangkan kotak pop-up notifikasi dan matikan alarmnya seketika!
+            if (targetStatus === 'completed') {
+                if (typeof window.resolveTaskAlarm === 'function') {
+                    window.resolveTaskAlarm(taskId);
+                }
+            } else {
+                if (window.TASKFLOW_URGENT && Array.isArray(window.TASKFLOW_URGENT)) {
+                    const taskObj = window.TASKFLOW_URGENT.find(t => t.id == taskId);
+                    if (taskObj) taskObj.status = targetStatus;
+                }
+            }
+
             // ✏️ [TIPS UJIAN]: Jika tugas dipindah ke kolom 'completed' (Selesai),
             // coret teks judulnya dengan class 'line-through'
             const titleElem = draggedCard.querySelector('h4');

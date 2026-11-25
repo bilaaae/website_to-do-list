@@ -50,11 +50,29 @@ switch ($action) {
             $start_time  = null; // Diset null karena input waktu difokuskan pada jam deadline
             $due_time    = !empty($_POST['due_time']) ? $_POST['due_time'] : null;
 
-            // ✏️ [TIPS UJIAN UKK - VALIDASI INPUT]:
-            // Jika penguji meminta "Judul tidak boleh kosong dan minimal 5 karakter":
-            // if (empty($title) || strlen($title) < 5) { ... }
-            if (empty($title)) {
-                setFlash('danger', 'Judul tugas wajib diisi!');
+            // 🎯 [VALIDASI WAJIB DIISI & MINIMAL KARAKTER]:
+            if (empty($title) || strlen($title) < 5) {
+                setFlash('danger', 'Judul tugas wajib diisi dan minimal 5 karakter!');
+                header("Location: index.php");
+                exit;
+            }
+
+            
+            //Tambah kode dibawah jika deskipsi wajib diisi:
+            if (empty($description)) {
+                setFlash('danger', 'Deskripsi tugas wajib diisi!');
+                header("Location: index.php");
+                exit;
+            }
+
+
+            if (empty($due_date)) {
+                setFlash('danger', 'Tanggal agenda tugas wajib diisi!');
+                header("Location: index.php");
+                exit;
+            }
+            if (empty($due_time)) {
+                setFlash('danger', 'Jam deadline tugas wajib diisi!');
                 header("Location: index.php");
                 exit;
             }
@@ -108,8 +126,32 @@ switch ($action) {
             $start_time  = null;
             $due_time    = !empty($_POST['due_time']) ? $_POST['due_time'] : null;
 
-            if (!$id || empty($title)) {
-                setFlash('danger', 'ID tugas atau judul tidak valid.');
+            if (!$id) {
+                setFlash('danger', 'ID tugas tidak valid.');
+                header("Location: index.php");
+                exit;
+            }
+            if (empty($title) || strlen($title) < 5) {
+                setFlash('danger', 'Judul tugas wajib diisi dan minimal 5 karakter!');
+                header("Location: index.php");
+                exit;
+            }
+
+            //Tambah kode dibawah jika deskipsi wajib diisi:
+            if (empty($description)) {
+                setFlash('danger', 'Deskripsi tugas wajib diisi!');
+                header("Location: index.php");
+                exit;
+            }
+
+
+            if (empty($due_date)) {
+                setFlash('danger', 'Tanggal agenda tugas wajib diisi!');
+                header("Location: index.php");
+                exit;
+            }
+            if (empty($due_time)) {
+                setFlash('danger', 'Jam deadline tugas wajib diisi!');
                 header("Location: index.php");
                 exit;
             }

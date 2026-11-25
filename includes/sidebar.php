@@ -10,7 +10,7 @@ $currentCategory = $currentCategory ?? 'all';
 $currentPriority = $currentPriority ?? 'all';
 $currentSort     = $currentSort ?? 'deadline_asc';
 $searchQuery     = $searchQuery ?? '';
-$categories      = $categories ?? ['Umum', 'Pekerjaan', 'Pribadi', 'Belajar', 'Keuangan', 'Kesehatan', 'Organisasi', 'UKK & LSP'];
+$categories      = $categories ?? ['Umum', 'Pekerjaan', 'Pribadi', 'Belajar', 'Keuangan', 'Kesehatan', 'Organisasi',  'Magang PKL'];
 $stats           = $stats ?? ['total' => 0, 'completed' => 0, 'percent' => 0];
 $calMonth        = $calMonth ?? (int)date('n');
 $calYear         = $calYear ?? (int)date('Y');
@@ -27,42 +27,42 @@ $calYear         = $calYear ?? (int)date('Y');
     <div>
         <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2.5 px-1 flex items-center justify-between">
             <span>Menu Tampilan</span>
-            <i class="fa-solid fa-compass text-slate-300"></i>
+            <i class="fa-solid fa-compass text-slate-300"></i> <!--ini logo kompas -->
         </p>
         <nav class="space-y-1">
             <!-- Papan Kanban -->
             <a href="?view=kanban&sort=<?= urlencode($currentSort) ?>&category=<?= urlencode($currentCategory) ?>&priority=<?= urlencode($currentPriority) ?>&q=<?= urlencode($searchQuery) ?>"
-               class="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition <?= $viewMode === 'kanban' ? 'bg-brand-50 text-brand-700 border border-brand-200/60 shadow-sm' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' ?>">
+               class="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition <?= $viewMode === 'kanban' ? 'sidebar-mode-active bg-brand-50 text-brand-700 border border-brand-200/60 shadow-sm' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' ?>">
                 <div class="flex items-center space-x-2.5">
-                    <i class="fa-solid fa-table-columns text-sm <?= $viewMode === 'kanban' ? 'text-brand-600' : 'text-slate-400' ?>"></i>
+                    <i class="fa-solid fa-table-columns text-sm <?= $viewMode === 'kanban' ? 'sidebar-mode-icon text-brand-600' : 'text-slate-400' ?>"></i>
                     <span>Kanban Board</span>
                 </div>
                 <?php if ($viewMode === 'kanban'): ?>
-                <span class="w-1.5 h-1.5 rounded-full bg-brand-600"></span>
+                <span class="sidebar-mode-dot w-1.5 h-1.5 rounded-full bg-brand-600"></span>
                 <?php endif; ?>
             </a>
 
             <!-- Daftar List -->
             <a href="?view=list&sort=<?= urlencode($currentSort) ?>&category=<?= urlencode($currentCategory) ?>&priority=<?= urlencode($currentPriority) ?>&q=<?= urlencode($searchQuery) ?>"
-               class="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition <?= $viewMode === 'list' ? 'bg-brand-50 text-brand-700 border border-brand-200/60 shadow-sm' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' ?>">
+               class="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition <?= $viewMode === 'list' ? 'sidebar-mode-active bg-brand-50 text-brand-700 border border-brand-200/60 shadow-sm' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' ?>">
                 <div class="flex items-center space-x-2.5">
-                    <i class="fa-solid fa-list-ul text-sm <?= $viewMode === 'list' ? 'text-brand-600' : 'text-slate-400' ?>"></i>
+                    <i class="fa-solid fa-list-ul text-sm <?= $viewMode === 'list' ? 'sidebar-mode-icon text-brand-600' : 'text-slate-400' ?>"></i>
                     <span>Daftar List</span>
                 </div>
                 <?php if ($viewMode === 'list'): ?>
-                <span class="w-1.5 h-1.5 rounded-full bg-brand-600"></span>
+                <span class="sidebar-mode-dot w-1.5 h-1.5 rounded-full bg-brand-600"></span>
                 <?php endif; ?>
             </a>
 
             <!-- Kalender Agenda -->
             <a href="?view=calendar&month=<?= $calMonth ?>&year=<?= $calYear ?>&sort=<?= urlencode($currentSort) ?>&category=<?= urlencode($currentCategory) ?>&priority=<?= urlencode($currentPriority) ?>&q=<?= urlencode($searchQuery) ?>"
-               class="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition <?= $viewMode === 'calendar' ? 'bg-brand-50 text-brand-700 border border-brand-200/60 shadow-sm' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' ?>">
+               class="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition <?= $viewMode === 'calendar' ? 'sidebar-mode-active bg-brand-50 text-brand-700 border border-brand-200/60 shadow-sm' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' ?>">
                 <div class="flex items-center space-x-2.5">
-                    <i class="fa-regular fa-calendar-days text-sm <?= $viewMode === 'calendar' ? 'text-brand-600' : 'text-slate-400' ?>"></i>
+                    <i class="fa-regular fa-calendar-days text-sm <?= $viewMode === 'calendar' ? 'sidebar-mode-icon text-brand-600' : 'text-slate-400' ?>"></i>
                     <span>Kalender Agenda</span>
                 </div>
                 <?php if ($viewMode === 'calendar'): ?>
-                <span class="w-1.5 h-1.5 rounded-full bg-brand-600"></span>
+                <span class="sidebar-mode-dot w-1.5 h-1.5 rounded-full bg-brand-600"></span>
                 <?php endif; ?>
             </a>
         </nav>

@@ -33,8 +33,9 @@
                 <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
                     Judul Tugas <span class="text-rose-500">*</span>
                 </label>
-                <input type="text" name="title" required placeholder="Contoh: Menyiapkan materi presentasi UKK" 
-                       class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+                <input type="text" name="title" required  minlength="5" placeholder="Contoh: Menyiapkan materi presentasi UKK" 
+                       class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 
+                       focus:outline-none transition">
             </div>
 
             <!-- Deskripsi Tugas -->
@@ -42,6 +43,7 @@
                 <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
                     Deskripsi / Catatan Tambahan
                 </label>
+                <!--tambah kata " required" jika kolom wajib diisi sblm rows -->
                 <textarea name="description" rows="3" placeholder="Tambahkan rincian atau poin-poin penting tugas..." 
                           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition resize-none"></textarea>
             </div>
@@ -49,8 +51,10 @@
             <!-- Grid Kategori & Status Kolom Awal -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Kategori</label>
-                    <select name="category" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                        Kategori <span class="text-rose-500">*</span>
+                    </label>
+                    <select name="category" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
                         <option value="Umum">Umum</option>
                         <option value="Pekerjaan">Pekerjaan</option>
                         <option value="Pribadi">Pribadi</option>
@@ -58,13 +62,15 @@
                         <option value="Keuangan">Keuangan</option>
                         <option value="Kesehatan">Kesehatan</option>
                         <option value="Organisasi">Organisasi</option>
-                        <option value="UKK & LSP">UKK & LSP</option>
+                        <option value="Magang PKL">Magang PKL</option>
                     </select>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Kolom Status</label>
-                    <select name="status" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                        Kolom Status <span class="text-rose-500">*</span>
+                    </label>
+                    <select name="status" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
                         <option value="todo">Belum Mulai</option>
                         <option value="in_progress">Sedang Dikerjakan</option>
                         <option value="completed">Selesai</option>
@@ -75,13 +81,17 @@
             <!-- Grid Tanggal & Jam Deadline -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Tanggal Agenda</label>
-                    <input type="date" name="due_date" id="add-task-due-date" 
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                        Tanggal Agenda <span class="text-rose-500">*</span>
+                    </label>
+                    <input type="date" name="due_date" id="add-task-due-date" required 
                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Jam Deadline</label>
-                    <input type="time" name="due_time" id="add-task-due-time" 
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                        Jam Deadline <span class="text-rose-500">*</span>
+                    </label>
+                    <input type="time" name="due_time" id="add-task-due-time" required 
                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
                 </div>
             </div>
@@ -153,7 +163,7 @@
                 <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
                     Judul Tugas <span class="text-rose-500">*</span>
                 </label>
-                <input type="text" name="title" id="edit-task-title" required 
+                <input type="text" name="title" id="edit-task-title" required minlength="5" 
                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
             </div>
 
@@ -162,6 +172,7 @@
                 <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
                     Deskripsi / Catatan Tambahan
                 </label>
+                <!--tambah kata " required" jika kolom wajib diisi sblm rows -->
                 <textarea name="description" id="edit-task-desc" rows="3" 
                           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition resize-none"></textarea>
             </div>
@@ -169,8 +180,10 @@
             <!-- Grid Kategori & Status -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Kategori</label>
-                    <select name="category" id="edit-task-category" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                        Kategori <span class="text-rose-500">*</span>
+                    </label>
+                    <select name="category" id="edit-task-category" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
                         <option value="Umum">Umum</option>
                         <option value="Pekerjaan">Pekerjaan</option>
                         <option value="Pribadi">Pribadi</option>
@@ -178,13 +191,15 @@
                         <option value="Keuangan">Keuangan</option>
                         <option value="Kesehatan">Kesehatan</option>
                         <option value="Organisasi">Organisasi</option>
-                        <option value="UKK & LSP">UKK & LSP</option>
+                        <option value="Magang PKL">Magang PKL</option>
                     </select>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Kolom Status</label>
-                    <select name="status" id="edit-task-status" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                        Kolom Status <span class="text-rose-500">*</span>
+                    </label>
+                    <select name="status" id="edit-task-status" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
                         <option value="todo">Belum Mulai</option>
                         <option value="in_progress">Sedang Dikerjakan</option>
                         <option value="completed">Selesai</option>
@@ -195,13 +210,17 @@
             <!-- Grid Tanggal & Jam Deadline -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Tanggal Agenda</label>
-                    <input type="date" name="due_date" id="edit-task-due-date" 
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                        Tanggal Agenda <span class="text-rose-500">*</span>
+                    </label>
+                    <input type="date" name="due_date" id="edit-task-due-date" required 
                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Jam Deadline</label>
-                    <input type="time" name="due_time" id="edit-task-due-time" 
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                        Jam Deadline <span class="text-rose-500">*</span>
+                    </label>
+                    <input type="time" name="due_time" id="edit-task-due-time" required 
                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:outline-none transition">
                 </div>
             </div>

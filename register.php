@@ -53,9 +53,19 @@ $flash = getFlash();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css?v=<?= time() ?>">
+
+    <!-- Script Pengatur Mode Gelap (Dark Mode) -->
+    <script src="assets/js/theme.js?v=<?= time() ?>"></script>
 </head>
 <body class="bg-gradient-to-br from-slate-50 via-indigo-50/40 to-slate-100 min-h-screen flex flex-col justify-center items-center p-4 antialiased selection:bg-brand-500 selection:text-white py-12">
+
+    <!-- Tombol Beralih Mode Gelap/Terang -->
+    <div class="fixed top-5 right-5 z-50">
+        <button type="button" class="btn-theme-toggle w-10 h-10 rounded-2xl border border-slate-200 bg-white/90 backdrop-blur-md shadow-md hover:bg-slate-50 flex items-center justify-center text-sm transition" title="Beralih Mode Gelap/Terang">
+            <i class="fa-solid fa-moon text-slate-600"></i>
+        </button>
+    </div>
 
     <div class="w-full max-w-lg">
 
@@ -79,7 +89,7 @@ $flash = getFlash();
         <?php endif; ?>
 
         <!-- KARTU FORM PENDAFTARAN -->
-        <div class="bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-200/50 p-6 sm:p-8">
+        <div class="auth-card bg-white/90 backdrop-blur-md rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-200/50 p-6 sm:p-8">
             
             <form action="auth.php?action=register" method="POST" class="space-y-4">
 
